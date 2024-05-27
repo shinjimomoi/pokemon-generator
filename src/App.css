@@ -77,6 +77,26 @@
   border-radius: 5px;
 }
 
+.btn {
+  margin-top: 40px;
+}
+
+.spinner {
+  border: 16px solid rgba(0, 0, 0, 0.1);
+  border-left-color: #333;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  animation: spin 1s linear infinite;
+  margin: auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (min-width: 500px) {
   #card {
     max-width: 400px;

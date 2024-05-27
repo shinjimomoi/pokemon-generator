@@ -7,7 +7,7 @@ interface ButtonProps {
 const Button: React.FC<ButtonProps> = ({ onClick }) => {
   return (
     <div>
-      <button onClick={onClick}>Generate</button>
+      <button className='btn btn-gen' onClick={onClick}>Generate</button>
     </div>
   );
 };

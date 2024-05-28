@@ -88,6 +88,27 @@ li {
 
 .btn {
   margin-top: 40px;
+  background-color: #404060;
+}
+
+.my-cards {
+  margin-bottom: 40px;
+}
+
+.generate {
+  height: 565px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #404060;
+}
+
+.generate button {
+  background-color: #ffc955;
+  color: #404060;
+  width: 108px;
+  height: 44px;
 }
 
 .spinner {
@@ -107,7 +128,7 @@ li {
 }
 
 @media (min-width: 500px) {
-  #card {
+  #card, .generate {
     max-width: 400px;
     margin: auto;
   }

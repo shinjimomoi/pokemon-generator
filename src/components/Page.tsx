@@ -31,7 +31,7 @@ const Page: React.FC = () => {
   return (
     <div>
       <h1>Gen</h1>
-      <Button onClick={showPokemons} text={showGenerator ? "My Cards" : "New Card" } />
+      <Button onClick={showPokemons} text={showGenerator ? "My Cards" : "New Card" } className='my-cards' />
       <div className={showGenerator ? 'hidden' : ''}>
         <Pokemons/>
       </div>
@@ -51,7 +51,7 @@ const Page: React.FC = () => {
               types={pokemon.types}
             />
           )}
-          <Button onClick={handleFetchPokemon} text="Generate" />
+          <Button onClick={handleFetchPokemon} text="Generate" className='generate' />
         </>
       )}
       </div>

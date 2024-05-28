@@ -6,7 +6,7 @@
 }
 
 .hidden {
-  display: none;
+  display: none !important;
 }
 
 li {
@@ -97,11 +97,12 @@ li {
 
 .generate {
   height: 565px;
+  border-radius: 10px;
   margin: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #404060;
+  background-color: #9393b730;
 }
 
 .generate button {
@@ -109,6 +110,23 @@ li {
   color: #404060;
   width: 108px;
   height: 44px;
+}
+
+.card-container {
+  position: relative;
+}
+
+.win-msg {
+  background-color: #ffc955;
+  border-radius: 8px;
+  box-shadow: 0px 0px 29px rgba(255, 255, 255, 0.5);
+  color: #404060;
+  padding: 8px 16px;
+  font-size: 24px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .spinner {

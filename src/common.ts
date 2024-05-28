@@ -34,4 +34,8 @@ export const colorCard = (str: string): string | undefined => {
   return typeColors[str];
 };
 
+export const getRandomInt = (max:number) => {
+  return Math.floor(Math.random() * max);
+}
+
 export * from './common';

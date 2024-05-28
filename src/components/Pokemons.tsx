@@ -14,35 +14,27 @@ const Pokemons = () => {
   useEffect(() => {
     // Initialize the Firebase database with the provided configuration
     const database = getDatabase(cong);
-    console.log(database, "database??")
-    console.log(ref, "ref??")
     
     // Reference to the specific collection in the database
     const collectionRef = ref(database, "pokemon");
-    console.log(collectionRef, "collectionRef??")
-
 
     // Function to fetch data from the database
     const fetchData = () => {
-      // Listen for changes in the collection
       onValue(collectionRef, async (snapshot) => { 
         const dataItem = snapshot.val();
         console.log(dataItem, "display item")
 
-        // Check if dataItem exists
         if (dataItem) {
           // Convert the object values into an array
           const itemsArray: number[] = Object.values(dataItem);
           const fetchedPokemons = await Promise.all(
             itemsArray.map((id) => fetchPokemon(id))
           );
-          console.log(fetchedPokemons, "pokemons fetch")
           setPokemons(fetchedPokemons);
         }
       });
     };
 
-    // Fetch data when the component mounts
     fetchData();
   }, []);
 

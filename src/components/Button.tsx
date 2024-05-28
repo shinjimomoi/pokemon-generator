@@ -2,12 +2,13 @@ import React from 'react';
 
 interface ButtonProps {
   onClick: () => void;
+  text: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ onClick }) => {
+const Button: React.FC<ButtonProps> = ({ onClick, text }) => {
   return (
     <div>
-      <button className='btn btn-gen' onClick={onClick}>Generate</button>
+      <button className='btn btn-gen' onClick={onClick}>{text}</button>
     </div>
   );
 };

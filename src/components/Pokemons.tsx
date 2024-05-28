@@ -4,6 +4,8 @@ import { getDatabase, ref, onValue } from "firebase/database";
 import fetchPokemon from "./FetchPokemon"; 
 import PokemonCard from "./Card"; 
 import { PokemonData } from "../types";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
 const Pokemons = () => {
 
@@ -45,11 +47,19 @@ const Pokemons = () => {
   }, []);
 
   return (
-    <div>
+    <Swiper spaceBetween={50}
+            slidesPerView={1}
+            onSlideChange={() => console.log('slide change')}
+            onSwiper={(swiper) => console.log(swiper)}
+            loop={true}
+            pagination={{
+              clickable: true,
+            }}
+          >
       {pokemons && pokemons.map((pokemon, index) => (
         <li key={index}>
-          <div key={index} className="col-md-4 mb-4">
-            <PokemonCard
+          <SwiperSlide key={index} className="col-md-4 mb-4">
+            <PokemonCard 
               hp={pokemon.stats[0].base_stat}
               imgSrc={pokemon.sprites.front_default}
               pokeName={pokemon.name}
@@ -58,10 +68,10 @@ const Pokemons = () => {
               statSpeed={pokemon.stats[5].base_stat}
               types={pokemon.types}
             />
-          </div>
+          </SwiperSlide>
         </li>
       ))}
-    </div>
+    </Swiper>
   );
 };
 

@@ -11,7 +11,7 @@ interface Props {
   types: { type: { name: string } }[];
 }
 
-const Card: React.FC<Props> = ({ hp, imgSrc, pokeName, statAttack, statDefense, statSpeed, types }) => {
+const PokemonCard: React.FC<Props> = ({ hp, imgSrc, pokeName, statAttack, statDefense, statSpeed, types }) => {
   const [cardColor, setCardColor] = useState('#242424');
 
   // Function to append types
@@ -35,7 +35,7 @@ const Card: React.FC<Props> = ({ hp, imgSrc, pokeName, statAttack, statDefense, 
   }, [types]);
 
   return (
-    <div id="card" style={{ background: `radial-gradient(circle at 50% 0%, ${cardColor} 36%, #242424 36%)` }}>
+    <div id="card" style={{ background: `radial-gradient(circle at 50% 0%, ${cardColor} 36%, #404060 36%)` }}>
       <p className="hp">
         <span>HP</span>
         {hp}
@@ -63,4 +63,4 @@ const Card: React.FC<Props> = ({ hp, imgSrc, pokeName, statAttack, statDefense, 
   );
 };
 
-export default Card;
+export default PokemonCard;

@@ -6,12 +6,12 @@ import fetchPokemon from './FetchPokemon';
 import { PokemonData } from '../types';
 
 const Page: React.FC = () => {
-  const [showPokemonList, setShowPokemonList] = useState<boolean>(false);
+  const [showGenerator, setShowGenerator] = useState<boolean>(false);
   const [pokemon, setPokemon] = useState<PokemonData | null>(null);
   const [loading, setLoading] = useState<boolean>(false); // Add loading state
 
   const showPokemons = () => {
-    setShowPokemonList(!showPokemonList);
+    setShowGenerator(!showGenerator);
   }
 
   const handleFetchPokemon = async () => {
@@ -19,7 +19,6 @@ const Page: React.FC = () => {
     setTimeout(async () => {
       try {
         const data = await fetchPokemon();
-        console.log(data, "data====")
         setPokemon(data);
       } catch (error) {
         console.error('Error fetching Pokémon:', error);
@@ -31,11 +30,12 @@ const Page: React.FC = () => {
 
   return (
     <div>
-      <h1>Generator</h1>
-      <Button onClick={showPokemons} text={showPokemonList ? "Hide" : "Show" } />
-      <div className={showPokemonList ? '' : 'hidden'}>
+      <h1>Gen</h1>
+      <Button onClick={showPokemons} text={showGenerator ? "My Cards" : "New Card" } />
+      <div className={showGenerator ? 'hidden' : ''}>
         <Pokemons/>
       </div>
+      <div className={showGenerator ? '' : 'hidden'}>
       {loading ? (
         <div className="spinner"></div> // Display the spinner component
       ) : (
@@ -54,6 +54,7 @@ const Page: React.FC = () => {
           <Button onClick={handleFetchPokemon} text="Generate" />
         </>
       )}
+      </div>
     </div>
   );
 };

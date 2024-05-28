@@ -1,32 +1,31 @@
 import React, { useState } from "react";
 import Button from "./Button";
-import PokemonCard from "./Card";
 import Pokemons from "./Pokemons";
 import fetchPokemon from "./FetchPokemon";
 import { getRandomInt } from "../common";
-import { PokemonData } from "../types";
 import { getDatabase, push, ref } from "firebase/database";
 
 const Page: React.FC = () => {
-  const [switchTab, setSwitchTab] = useState<boolean>(false);
+  const [switchTab, setSwitchTab] = useState<boolean>(true);
   const [genBtn, setGenBtn] = useState<boolean>(true);
-  const [pokemon, setPokemon] = useState<PokemonData | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [tryAgain, setTryAgain] = useState<boolean>(false);
+  const [losingMsg, setLosingMsg] = useState<boolean>(false);
   const [winningMsg, setWinningMsg] = useState<boolean>(false);
+  const [newCard, setNewCard] = useState<boolean>(false);
 
   const showPokemons = () => {
     setSwitchTab(!switchTab);
   };
 
   const play = () => {
-    const num = getRandomInt(1);
+    const num = getRandomInt(7);
     if (num === 0) {
       handleFetchPokemon();
     } else {
-      setTryAgain(true); // Set try again state to true
-      setPokemon(null);
-      setGenBtn(false);
+      setLosingMsg(true); // Set try again state to true
+      setTimeout(() => {
+        setLosingMsg(false);
+      }, 3200);
     }
   };
 
@@ -35,8 +34,6 @@ const Page: React.FC = () => {
     try {
       const data = await fetchPokemon();
       setGenBtn(false);
-      setTryAgain(false);
-      setPokemon(data);
 
       const db = getDatabase();
       const newPokemonRef = ref(db, `pokemon`);
@@ -46,6 +43,9 @@ const Page: React.FC = () => {
     } finally {
       setLoading(false); // Set loading back to false when fetching completes (whether successful or not)
       setWinningMsg(true);
+      setNewCard(true);
+      setGenBtn(true);
+      setSwitchTab(true);
       setTimeout(() => {
         setWinningMsg(false);
       }, 3200);
@@ -58,44 +58,36 @@ const Page: React.FC = () => {
       <p>You can play once a day to get a card.</p>
       <Button
         onClick={showPokemons}
-        text={switchTab ? "My Cards Collection" : "Play to get a new card"}
+        text={switchTab ? "Play to get a new card" : "Go to my Collection"}
         className="my-cards"
       />
-      <div className={switchTab ? "hidden" : ""}>
-        <Pokemons />
-      </div>
-      <div className={switchTab ? "" : "hidden"}>
-        {loading ? (
-          <div className="spinner"></div> // Display the spinner component
-        ) : (
-          <>
-            {pokemon ? (
-              <div className="card-container">
-                <PokemonCard
-                  hp={pokemon.stats[0].base_stat}
-                  imgSrc={pokemon.sprites.front_default}
-                  pokeName={pokemon.name}
-                  statAttack={pokemon.stats[1].base_stat}
-                  statDefense={pokemon.stats[2].base_stat}
-                  statSpeed={pokemon.stats[5].base_stat}
-                  types={pokemon.types}
-                />
-                <h2 className={`win-msg ${winningMsg ? "" : "hidden"}`}>
-                  You got a new card! <br />
-                  It was added to your cards collection.
-                </h2>
-              </div>
-            ) : (
-              tryAgain && <div>Try again next time</div>
-            )}
-            <Button
-              onClick={play}
-              text="Play"
-              className={`generate ${genBtn ? "" : "hidden"}`}
-            />
-          </>
-        )}
-      </div>
+      {switchTab ? (
+        <div className="card-container">
+          <Pokemons newCard={newCard ? true : false} />
+          <h2 className={`win-msg ${winningMsg ? "" : "hidden"}`}>
+            You got a new card! <br />
+            It was added to your cards collection.
+          </h2>
+        </div>
+      ) : (
+        <div>
+          {loading ? (
+            <div className="spinner"></div>
+          ) : (
+            <div className="card-container">
+              <Button
+                onClick={play}
+                text="Play"
+                className={`generate ${genBtn ? "" : "hidden"}`}
+              />
+              <h2 className={`lose-msg ${losingMsg ? "" : "hidden"}`}>
+                You did not win <br />
+                Try again!
+              </h2>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

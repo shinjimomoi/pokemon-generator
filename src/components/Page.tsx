@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import Button from "./Button";
-import Pokemons from "./Pokemons";
-import fetchPokemon from "./FetchPokemon";
-import { getRandomInt } from "../common";
-import { getDatabase, push, ref } from "firebase/database";
+import React, { useState } from 'react';
+import Button from './Button';
+import Pokemons from './Pokemons';
+import { getPokemonData } from './FetchPokemon';
+import { getRandomInt } from '../common';
+import { getDatabase, push, ref } from 'firebase/database';
 
 const Page: React.FC = () => {
   const [switchTab, setSwitchTab] = useState<boolean>(true);
@@ -32,7 +32,7 @@ const Page: React.FC = () => {
   const handleFetchPokemon = async () => {
     setLoading(true); // Set loading to true when fetching starts
     try {
-      const data = await fetchPokemon();
+      const data = await getPokemonData();
       setGenBtn(false);
 
       const db = getDatabase();

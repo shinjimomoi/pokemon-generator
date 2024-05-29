@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import cong from "../config";
 import { getDatabase, ref, onValue } from "firebase/database";
-import fetchPokemon from "./FetchPokemon";
-import PokemonCard from "./Card";
+import { getPokemonData } from "./FetchPokemon"; 
+import PokemonCard from "./Card"; 
 import { PokemonData } from "../types";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -32,7 +32,7 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
           // Convert the object values into an array
           const itemsArray: number[] = Object.values(dataItem);
           const fetchedPokemons = await Promise.all(
-            itemsArray.map((id) => fetchPokemon(id))
+            itemsArray.map((id) => getPokemonData(id))
           );
           setInitialSlide(itemsArray.length);
           setPokemons(fetchedPokemons);

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import cong from "../config";
+import { auth, fire } from "../firebase";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { getPokemonData } from "./FetchPokemon"; 
 import PokemonCard from "./Card"; 
@@ -17,30 +17,33 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
 
   useEffect(() => {
     // Initialize the Firebase database with the provided configuration
-    const database = getDatabase(cong);
+    const db = getDatabase(fire);
 
-    // Reference to the specific collection in the database
-    const collectionRef = ref(database, "pokemon");
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const userUID = currentUser.uid;
+      const collectionRef = ref(db, `users/${userUID}/pokemon`);
+  
 
-    // Function to fetch data from the database
-    const fetchData = () => {
-      onValue(collectionRef, async (snapshot) => {
-        const dataItem = snapshot.val();
-        console.log(dataItem, "display item");
+  // Function to fetch data from the database
+      const fetchData = () => {
+        onValue(collectionRef, async (snapshot) => {
+          const dataItem = snapshot.val();
+          console.log(dataItem, "display item");
 
-        if (dataItem) {
-          // Convert the object values into an array
-          const itemsArray: number[] = Object.values(dataItem);
-          const fetchedPokemons = await Promise.all(
-            itemsArray.map((id) => getPokemonData(id))
-          );
-          setInitialSlide(itemsArray.length);
-          setPokemons(fetchedPokemons);
-        }
-      });
-    };
-
-    fetchData();
+          if (dataItem) {
+            // Convert the object values into an array
+            const itemsArray: number[] = Object.values(dataItem);
+            const fetchedPokemons = await Promise.all(
+              itemsArray.map((id) => getPokemonData(id))
+            );
+            setInitialSlide(itemsArray.length);
+            setPokemons(fetchedPokemons);
+          }
+        });
+      };
+      fetchData();
+    }
   }, []);
 
   if (!pokemons || initialSlide === null) {

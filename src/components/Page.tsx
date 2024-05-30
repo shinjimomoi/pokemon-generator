@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import Button from './Button';
 import Pokemons from './Pokemons';
-import { getPokemonData } from './FetchPokemon';
+import { fetchPokemon } from './FetchPokemon';
 import { getRandomInt } from '../common';
 import { getDatabase, push, ref } from 'firebase/database';
+import { auth } from '../firebase';
 
 const Page: React.FC = () => {
   const [switchTab, setSwitchTab] = useState<boolean>(true);
@@ -18,7 +19,7 @@ const Page: React.FC = () => {
   };
 
   const play = () => {
-    const num = getRandomInt(7);
+    const num = getRandomInt(1);
     if (num === 0) {
       handleFetchPokemon();
     } else {
@@ -32,12 +33,15 @@ const Page: React.FC = () => {
   const handleFetchPokemon = async () => {
     setLoading(true); // Set loading to true when fetching starts
     try {
-      const data = await getPokemonData();
+      const data = await fetchPokemon();
       setGenBtn(false);
-
-      const db = getDatabase();
-      const newPokemonRef = ref(db, `pokemon`);
-      await push(newPokemonRef, data.id);
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        const userUID = currentUser.uid;
+        const db = getDatabase();
+        const userPokemonRef = ref(db, `users/${userUID}/pokemon`);
+        await push(userPokemonRef, data.id);
+      }
     } catch (error) {
       console.error("Error fetching Pokémon:", error);
     } finally {
@@ -53,7 +57,7 @@ const Page: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className='container'>
       <h1>Card Generator</h1>
       <p>You can play once a day to get a card.</p>
       <Button

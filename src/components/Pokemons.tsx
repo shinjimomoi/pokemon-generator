@@ -13,7 +13,7 @@ interface Props {
 
 const Pokemons: React.FC<Props> = ({ newCard }) => {
   const [pokemons, setPokemons] = useState<PokemonData[] | null>(null);
-  const [initialSlide, setInitialSlide] = useState<number>(0);
+  const [lastSlide, setLastSlide] = useState<number>(0);
   const swiperRef = useRef<any | null>(null);
 
   useEffect(() => {
@@ -36,9 +36,10 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
             const fetchedPokemons = await Promise.all(
               itemsArray.map((id) => getPokemonData(id))
             );
-            setInitialSlide(itemsArray.length);
+            setLastSlide(itemsArray.length);
             setPokemons(fetchedPokemons);
             if (swiperRef.current) {
+              console.log(swiperRef.current, "swiperRef.current")
               swiperRef.current.swiper.slideTo(itemsArray.length);
             }
           }
@@ -48,8 +49,8 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
     }
   }, [newCard]); // Watch for changes in newCard
 
-  if (!pokemons || initialSlide === null) {
-    return <div className="spinner"></div>;
+  if (!pokemons || lastSlide === null) {
+    return <div></div>;
   }
 
   return (
@@ -57,9 +58,8 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
       ref={swiperRef}
       spaceBetween={50}
       slidesPerView={1}
-      initialSlide={newCard ? initialSlide : 0}
-      onSlideChange={() => console.log("slide change")}
-      onSwiper={(swiper) => console.log(swiper)}
+      onSlideChange={() => {}}
+      onSwiper={(swiper) => {}}
       loop={true}
     >
       {pokemons &&

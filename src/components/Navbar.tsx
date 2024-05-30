@@ -6,7 +6,7 @@ const Navbar: React.FC = () => {
   const signout = () => {
     firebase.auth().signOut()
   };
-  
+
   return (
     <nav className='navbar'>
       <Button onClick={signout} text="Signout" className='signout'/>
@@ -15,5 +15,3 @@ const Navbar: React.FC = () => {
 };
 
 export default Navbar;
-
-

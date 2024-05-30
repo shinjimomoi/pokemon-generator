@@ -48,15 +48,15 @@ const PokemonCard: React.FC<Props> = ({ hp, imgSrc, pokeName, statAttack, statDe
       <div className="stats">
         <div>
           <h3>{statAttack}</h3>
-          <p>Attack</p>
+          <p style={{ color: cardColor}}>Attack</p>
         </div>
         <div>
           <h3>{statDefense}</h3>
-          <p>Defense</p>
+          <p style={{ color: cardColor}}>Defense</p>
         </div>
         <div>
           <h3>{statSpeed}</h3>
-          <p>Speed</p>
+          <p style={{ color: cardColor}}>Speed</p>
         </div>
       </div>
     </div>

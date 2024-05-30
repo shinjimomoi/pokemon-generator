@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { auth, fire } from "../firebase";
 import { getDatabase, ref, onValue } from "firebase/database";
-import { getPokemonData } from "./FetchPokemon"; 
-import PokemonCard from "./Card"; 
+import { getPokemonData } from "./FetchPokemon";
+import PokemonCard from "./Card";
 import { PokemonData } from "../types";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
@@ -13,7 +13,7 @@ interface Props {
 
 const Pokemons: React.FC<Props> = ({ newCard }) => {
   const [pokemons, setPokemons] = useState<PokemonData[] | null>(null);
-  const [lastSlide, setLastSlide] = useState<number>(0);
+  const [initialSlide, setInitialSlide] = useState<number>(0);
   const swiperRef = useRef<any | null>(null);
 
   useEffect(() => {
@@ -36,12 +36,8 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
             const fetchedPokemons = await Promise.all(
               itemsArray.map((id) => getPokemonData(id))
             );
-            setLastSlide(itemsArray.length);
+            setInitialSlide(itemsArray.length);
             setPokemons(fetchedPokemons);
-            if (swiperRef.current) {
-              console.log(swiperRef.current, "swiperRef.current")
-              swiperRef.current.swiper.slideTo(itemsArray.length);
-            }
           }
         });
       };
@@ -49,8 +45,8 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
     }
   }, [newCard]); // Watch for changes in newCard
 
-  if (!pokemons || lastSlide === null) {
-    return <div></div>;
+  if (!pokemons || initialSlide === null) {
+    return <div className="spinner"></div>;
   }
 
   return (
@@ -58,8 +54,9 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
       ref={swiperRef}
       spaceBetween={50}
       slidesPerView={1}
-      onSlideChange={() => {}}
-      onSwiper={(swiper) => {}}
+      initialSlide={newCard ? initialSlide : 0}
+      onSlideChange={() => console.log("slide change")}
+      onSwiper={(swiper) => console.log(swiper)}
       loop={true}
     >
       {pokemons &&

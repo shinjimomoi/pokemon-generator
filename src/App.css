@@ -53,9 +53,10 @@ li {
   width: 180px;
   max-height: 200px;
   position: relative;
-  margin: 20px auto;
+  margin: 0 auto;
 }
 .hp {
+  margin: 0;
   width: 80px;
   background-color: #404060;
   text-align: center;
@@ -64,6 +65,7 @@ li {
   margin-left: auto;
   font-weight: 400;
 }
+
 .poke-name {
   text-align: center;
   font-weight: 600;
@@ -71,7 +73,7 @@ li {
 .types {
   display: flex;
   justify-content: space-around;
-  margin: 20px 0 40px 0;
+  margin: 20px 0;
 }
 .hp span,
 .types span {
@@ -89,8 +91,14 @@ li {
   justify-content: space-between;
   text-align: center;
 }
+
+.stats h3 {
+  margin: 0;
+}
+
 .stats p {
-  color: #ffc955;
+  font-weight: 900;
+  margin: 0;
 }
 #btn {
   display: block;
@@ -108,12 +116,16 @@ li {
   background-color: #404060;
 }
 
+.flex {
+  display: flex;
+}
+
 .my-cards {
   margin-bottom: 40px;
 }
 
 .generate {
-  height: 565px;
+  height: 120px;
   border-radius: 10px;
   margin: auto;
   display: flex;
@@ -123,9 +135,9 @@ li {
 }
 
 .generate button {
-  background-color: #ffc955;
-  color: #404060;
-  width: 108px;
+  background-color: transparent;
+  color: #fff;
+  /* width: 108px; */
   height: 44px;
 }
 

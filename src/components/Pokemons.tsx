@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { auth, fire } from "../firebase";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { getPokemonData } from "./FetchPokemon"; 
@@ -14,6 +14,7 @@ interface Props {
 const Pokemons: React.FC<Props> = ({ newCard }) => {
   const [pokemons, setPokemons] = useState<PokemonData[] | null>(null);
   const [initialSlide, setInitialSlide] = useState<number>(0);
+  const swiperRef = useRef<any | null>(null);
 
   useEffect(() => {
     // Initialize the Firebase database with the provided configuration
@@ -23,9 +24,7 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
     if (currentUser) {
       const userUID = currentUser.uid;
       const collectionRef = ref(db, `users/${userUID}/pokemon`);
-  
 
-  // Function to fetch data from the database
       const fetchData = () => {
         onValue(collectionRef, async (snapshot) => {
           const dataItem = snapshot.val();
@@ -39,12 +38,15 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
             );
             setInitialSlide(itemsArray.length);
             setPokemons(fetchedPokemons);
+            if (swiperRef.current) {
+              swiperRef.current.swiper.slideTo(itemsArray.length);
+            }
           }
         });
       };
       fetchData();
     }
-  }, []);
+  }, [newCard]); // Watch for changes in newCard
 
   if (!pokemons || initialSlide === null) {
     return <div className="spinner"></div>;
@@ -52,20 +54,18 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
 
   return (
     <Swiper
+      ref={swiperRef}
       spaceBetween={50}
       slidesPerView={1}
       initialSlide={newCard ? initialSlide : 0}
       onSlideChange={() => console.log("slide change")}
       onSwiper={(swiper) => console.log(swiper)}
       loop={true}
-      pagination={{
-        clickable: true,
-      }}
     >
       {pokemons &&
         pokemons.map((pokemon, index) => (
           <li key={index}>
-            <SwiperSlide key={index} className="col-md-4 mb-4">
+            <SwiperSlide key={index} className="col-md-4 mb-4 blur">
               <PokemonCard
                 hp={pokemon.stats[0].base_stat}
                 imgSrc={pokemon.sprites.front_default}

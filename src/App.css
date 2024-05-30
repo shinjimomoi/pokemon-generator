@@ -166,6 +166,21 @@ li {
   }
 }
 
+/* Define a CSS animation for the blur effect */
+@keyframes blur-effect {
+  0% { filter: blur(0px); }
+  100% { filter: blur(8px); }
+}
+
+/* Apply the animation to the sliding element during transition */
+.swiper-slide {
+  transition: filter 0.3s ease; /* Ensure smooth transition */
+}
+
+.swiper-slide.blur {
+  animation: blur-effect 0.3s ease;
+}
+
 @media (min-width: 500px) {
   #card,
   .generate {

@@ -8,7 +8,7 @@ const Auth: React.FC = () => {
   });
 
   return (
-    <div>
+    <div className='container'>
       <h1>Card Generator</h1>
       <div id="firebaseui-auth-container"></div>
     </div>

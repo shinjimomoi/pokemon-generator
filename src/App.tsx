@@ -27,7 +27,7 @@ const App: React.FC = () => {
 
   return (
     <div className="App">
-      <Navbar />
+      {user ? <Navbar /> : null }
       {user ? <Page /> : <Auth />}
     </div>
   );

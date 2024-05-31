@@ -10,44 +10,34 @@ const Page: React.FC = () => {
   const [switchTab, setSwitchTab] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [losingMsgs, setLosingMsgs] = useState<boolean[]>([false, false, false]);
-  const [winningMsgs, setwinningMsgs] = useState<boolean[]>([false, false, false]);
+  const [winningMsgs, setWinningMsgs] = useState<boolean[]>([false, false, false]);
   const [newCard, setNewCard] = useState<boolean>(false);
 
   const showPokemons = () => {
     setSwitchTab(!switchTab);
   };
 
+  const updateMessageState = (index: number, setState: React.Dispatch<React.SetStateAction<boolean[]>>, value: boolean, delay: number) => {
+    setTimeout(() => {
+      setState(prevMsgs => {
+        const newMsgs = [...prevMsgs];
+        newMsgs[index] = value;
+        return newMsgs;
+      });
+    }, delay);
+  };
+
   const play = (index: number) => {
     const num = getRandomInt(5);
     if (num === 0) {
-      setwinningMsgs(prevMsgs => {
-        const newMsgs = [...prevMsgs];
-        newMsgs[index] = true;
-        return newMsgs;
-      });
+      updateMessageState(index, setWinningMsgs, true, 0);
+      updateMessageState(index, setWinningMsgs, false, 1200);
       setTimeout(() => {
-        setwinningMsgs(prevMsgs => {
-          const newMsgs = [...prevMsgs];
-          newMsgs[index] = false;
-          return newMsgs;
-        });
         handleFetchPokemon();
       }, 1200);
     } else {
-      setTimeout(() => {
-        setLosingMsgs(prevMsgs => {
-          const newMsgs = [...prevMsgs];
-          newMsgs[index] = true;
-          return newMsgs;
-        }); // Set try again state to true for the clicked button
-      }, 500);
-      setTimeout(() => {
-        setLosingMsgs(prevMsgs => {
-          const newMsgs = [...prevMsgs];
-          newMsgs[index] = false;
-          return newMsgs;
-        });
-      }, 3200);
+      updateMessageState(index, setLosingMsgs, true, 500);
+      updateMessageState(index, setLosingMsgs, false, 3200);
     }
   };
 

@@ -124,25 +124,25 @@ li {
   margin-bottom: 40px;
 }
 
-.generate {
-  height: 120px;
-  border-radius: 10px;
-  margin: auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #9393b730;
+.generate button {
+  padding: 0;
+  height: 200px;
+  width: 120px;
+  background-color: #404060;
+  color: #fff;
+  font-size: 40px;
+  font-weight: 900;
+  transition: 0.4s;
 }
 
-.generate button {
-  background-color: transparent;
-  color: #fff;
-  /* width: 108px; */
-  height: 44px;
+.generate button:hover {
+  transform: scale(1.4);
 }
 
 .card-container {
   position: relative;
+  gap: 8px;
+  justify-content: center;
 }
 
 .win-msg,

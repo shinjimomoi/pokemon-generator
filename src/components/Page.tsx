@@ -10,7 +10,7 @@ const Page: React.FC = () => {
   const [switchTab, setSwitchTab] = useState<boolean>(true);
   const [genBtn, setGenBtn] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
-  const [losingMsg, setLosingMsg] = useState<boolean>(false);
+  const [losingMsgs, setLosingMsgs] = useState<boolean[]>([false, false, false]);
   const [winningMsg, setWinningMsg] = useState<boolean>(false);
   const [newCard, setNewCard] = useState<boolean>(false);
 
@@ -18,14 +18,26 @@ const Page: React.FC = () => {
     setSwitchTab(!switchTab);
   };
 
-  const play = () => {
-    const num = getRandomInt(1);
+  const play = (index: number) => {
+    const num = getRandomInt(5);
     if (num === 0) {
-      handleFetchPokemon();
-    } else {
-      setLosingMsg(true); // Set try again state to true
       setTimeout(() => {
-        setLosingMsg(false);
+        handleFetchPokemon();
+      }, 1200);
+    } else {
+      setTimeout(() => {
+        setLosingMsgs(prevMsgs => {
+          const newMsgs = [...prevMsgs];
+          newMsgs[index] = true;
+          return newMsgs;
+        }); // Set try again state to true for the clicked button
+      }, 500);
+      setTimeout(() => {
+        setLosingMsgs(prevMsgs => {
+          const newMsgs = [...prevMsgs];
+          newMsgs[index] = false;
+          return newMsgs;
+        });
       }, 3200);
     }
   };
@@ -79,25 +91,18 @@ const Page: React.FC = () => {
             <div className="spinner"></div>
           ) : (
             <div className="card-container flex">
-              <Button
-                onClick={play}
-                text="Select"
-                className={`generate ${genBtn ? "" : "hidden"}`}
-              />
-              <Button
-                onClick={play}
-                text="Select"
-                className={`generate ${genBtn ? "" : "hidden"}`}
-              />
-              <Button
-                onClick={play}
-                text="Select"
-                className={`generate ${genBtn ? "" : "hidden"}`}
-              />
-              <h2 className={`lose-msg ${losingMsg ? "" : "hidden"}`}>
+              {[0, 1, 2].map((index) => (
+                <Button
+                  key={index}
+                  onClick={() => play(index)}
+                  text={`${losingMsgs[index] ? "Try again!" : "?"}`}
+                  className={`generate ${genBtn ? "" : "hidden"}`}
+                />
+              ))}
+              {/* <h2 className={`lose-msg ${losingMsgs ? "" : "hidden"}`}>
                 You did not win <br />
                 Try again!
-              </h2>
+              </h2> */}
             </div>
           )}
         </div>

@@ -28,8 +28,10 @@ const Page: React.FC = () => {
   };
 
   const play = (index: number) => {
-    const num = getRandomInt(5);
-    if (num === 0) {
+    const num = getRandomInt(3);
+    console.log(num, "num===")
+    console.log(index, "index===")
+    if (num === index + 1) {
       updateMessageState(index, setWinningMsgs, true, 0);
       updateMessageState(index, setWinningMsgs, false, 1200);
       setTimeout(() => {

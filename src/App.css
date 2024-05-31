@@ -65,11 +65,11 @@ button {
   background-color: transparent !important;
 }
 
-.navbar button:hover {
-  border: none;
+button:hover {
+  border: none !important;
 }
-.navbar button:focus-visible, .navbar button:focus {
-  outline: none;
+button:focus-visible, button:focus {
+  outline: none !important;
 }
 
 .hidden {

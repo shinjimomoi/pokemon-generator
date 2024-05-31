@@ -17,7 +17,7 @@ const PokemonCard: React.FC<Props> = ({ hp, imgSrc, pokeName, statAttack, statDe
   // Function to append types
   const renderTypes = () => {
     return types.map((item, index) => (
-      <span key={index}>{capitalizeFirstLetter(item.type.name)}</span>
+      <span key={index} style={{color: cardColor}}>{capitalizeFirstLetter(item.type.name)}</span>
     ));
   };
 

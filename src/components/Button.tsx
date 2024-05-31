@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface ButtonProps {
   onClick: () => void;
-  text: string;
+  text: ReactNode;
   className: string;
 }
 
 const Button: React.FC<ButtonProps> = ({ onClick, text, className }) => {
-  console.log(className, "classname of the btn")
   return (
     <div className={className}>
-      <button className='btn' onClick={onClick}>{text}</button>
+      <button className={`btn ${className}`} onClick={onClick}>{text}</button>
     </div>
   );
 };

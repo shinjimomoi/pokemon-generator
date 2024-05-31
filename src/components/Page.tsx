@@ -37,7 +37,7 @@ const Page: React.FC = () => {
       }, 1200);
     } else {
       updateMessageState(index, setLosingMsgs, true, 500);
-      updateMessageState(index, setLosingMsgs, false, 3200);
+      updateMessageState(index, setLosingMsgs, false, 1500);
     }
   };
 
@@ -63,9 +63,17 @@ const Page: React.FC = () => {
 
   const getButtonText = (index: number) => {
     if (losingMsgs[index]) {
-      return "Try again!";
+      return (
+        <>
+          Try<br />again!
+        </>
+      )
     } else if (winningMsgs[index]) {
-      return "You won!";
+      return (
+        <>
+          You<br />won!
+        </>
+      )
     } else {
       return "?";
     }
@@ -89,19 +97,15 @@ const Page: React.FC = () => {
           {loading ? (
             <div className="spinner"></div>
           ) : (
-            <div className="card-container flex">
+            <div className="flex cards">
               {[0, 1, 2].map((index) => (
                 <Button
                   key={index}
                   onClick={() => play(index)}
                   text={getButtonText(index)}
-                  className={`generate`}
+                  className={`btn-card`}
                 />
               ))}
-              {/* <h2 className={`lose-msg ${losingMsgs ? "" : "hidden"}`}>
-                You did not win <br />
-                Try again!
-              </h2> */}
             </div>
           )}
         </div>

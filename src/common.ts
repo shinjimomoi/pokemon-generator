@@ -13,7 +13,7 @@ export const colorCard = (str: string): string | undefined => {
     normal: '#A8A878',
     fighting: '#C03028',
     flying: '#A890F0',
-    poison: '#A040A0',
+    poison: '#e63ce6',
     ground: '#E0C068',
     rock: '#B8A038',
     bug: '#A8B820',

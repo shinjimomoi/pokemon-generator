@@ -5,12 +5,35 @@
   text-align: center;
 }
 
+body {
+  background-color: #fff;
+}
+
+/* Login */
+
+#firebaseui-auth-container {
+  margin-top: 24px;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+#firebaseui-auth-container>div {
+  border-radius: 8px;
+}
+
 .container {
   padding: 2rem;
 }
 
+.container h1, .container p {
+  color: #333;
+}
+
+.container h1 {
+  line-height: 3rem;
+}
+
 .navbar {
-  background-color: #333;
   display: flex;
   justify-content: end;
   padding: 8px;
@@ -18,6 +41,7 @@
 
 .navbar button {
   background-color: transparent !important;
+  color: #333;
 }
 
 .hidden {
@@ -42,12 +66,16 @@ li {
 
 #card {
   position: relative;
-  /* width: 88%; */
-  padding: 24px;
-  box-shadow: 0 20px 30px rgba(0, 0, 0, 0.15);
-  border-radius: 10px;
-  background-color: #454545;
+  padding: 24px;  
+  border-radius: 8px;
+  background-color: #454545;  
+  margin: 24px;
 }
+
+#card, .btn-card {
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.2);
+}
+
 #card img {
   display: block;
   width: 180px;
@@ -59,6 +87,7 @@ li {
   margin: 0;
   width: 80px;
   background-color: #404060;
+  color: #fff !important;
   text-align: center;
   padding: 8px 0;
   border-radius: 30px;
@@ -67,8 +96,9 @@ li {
 }
 
 .poke-name {
+  margin: 0;
   text-align: center;
-  font-weight: 600;
+  font-weight: 900;
 }
 .types {
   display: flex;
@@ -120,27 +150,28 @@ li {
   display: flex;
 }
 
-.my-cards {
-  margin-bottom: 40px;
-}
 
-.generate button {
+.btn-card button {
   padding: 0;
   height: 200px;
   width: 120px;
   background-color: #404060;
   color: #fff;
-  font-size: 40px;
+  font-size: 24px;
   font-weight: 900;
   transition: 0.4s;
 }
 
-.generate button.playing {
+.btn-card button.playing {
   transform: scale(1.4);
 }
 
 .card-container {
-  position: relative;
+  position: relative;  
+}
+
+.cards {
+  margin: 24px;
   gap: 8px;
   justify-content: center;
 }
@@ -150,7 +181,7 @@ li {
   z-index: 100;
   background-color: #404060e0;
   border-radius: 8px;
-  box-shadow: 0px 0px 29px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 29px rgba(0, 0, 0, 0.4);
   color: #ffffff;
   padding: 8px 16px;
   font-size: 24px;
@@ -163,7 +194,7 @@ li {
 
 .spinner {
   border: 16px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #333;
+  border-left-color: #404060;
   border-radius: 50%;
   width: 100px;
   height: 100px;
@@ -184,7 +215,6 @@ li {
   100% { filter: blur(8px); }
 }
 
-/* Apply the animation to the sliding element during transition */
 .swiper-slide {
   transition: filter 0.3s ease; /* Ensure smooth transition */
 }
@@ -195,7 +225,7 @@ li {
 
 @media (min-width: 500px) {
   #card,
-  .generate {
+  .btn-card {
     max-width: 300px;
     margin: auto;
   }

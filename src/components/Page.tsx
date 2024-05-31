@@ -8,10 +8,9 @@ import { auth } from '../firebase';
 
 const Page: React.FC = () => {
   const [switchTab, setSwitchTab] = useState<boolean>(true);
-  const [genBtn, setGenBtn] = useState<boolean>(true);
   const [loading, setLoading] = useState<boolean>(false);
   const [losingMsgs, setLosingMsgs] = useState<boolean[]>([false, false, false]);
-  const [winningMsg, setWinningMsg] = useState<boolean>(false);
+  const [winningMsgs, setwinningMsgs] = useState<boolean[]>([false, false, false]);
   const [newCard, setNewCard] = useState<boolean>(false);
 
   const showPokemons = () => {
@@ -21,7 +20,17 @@ const Page: React.FC = () => {
   const play = (index: number) => {
     const num = getRandomInt(5);
     if (num === 0) {
+      setwinningMsgs(prevMsgs => {
+        const newMsgs = [...prevMsgs];
+        newMsgs[index] = true;
+        return newMsgs;
+      });
       setTimeout(() => {
+        setwinningMsgs(prevMsgs => {
+          const newMsgs = [...prevMsgs];
+          newMsgs[index] = false;
+          return newMsgs;
+        });
         handleFetchPokemon();
       }, 1200);
     } else {
@@ -46,7 +55,6 @@ const Page: React.FC = () => {
     setLoading(true); // Set loading to true when fetching starts
     try {
       const data = await fetchPokemon();
-      setGenBtn(false);
       const currentUser = auth.currentUser;
       if (currentUser) {
         const userUID = currentUser.uid;
@@ -58,13 +66,18 @@ const Page: React.FC = () => {
       console.error("Error fetching Pokémon:", error);
     } finally {
       setLoading(false); // Set loading back to false when fetching completes (whether successful or not)
-      setWinningMsg(true);
       setNewCard(true);
-      setGenBtn(true);
       setSwitchTab(true);
-      setTimeout(() => {
-        setWinningMsg(false);
-      }, 3200);
+    }
+  };
+
+  const getButtonText = (index: number) => {
+    if (losingMsgs[index]) {
+      return "Try again!";
+    } else if (winningMsgs[index]) {
+      return "You won!";
+    } else {
+      return "?";
     }
   };
 
@@ -80,10 +93,6 @@ const Page: React.FC = () => {
       {switchTab ? (
         <div className="card-container">
           <Pokemons newCard={newCard ? true : false} />
-          <h2 className={`win-msg ${winningMsg ? "" : "hidden"}`}>
-            You got a new card! <br />
-            It was added to your cards collection.
-          </h2>
         </div>
       ) : (
         <div>
@@ -95,8 +104,8 @@ const Page: React.FC = () => {
                 <Button
                   key={index}
                   onClick={() => play(index)}
-                  text={`${losingMsgs[index] ? "Try again!" : "?"}`}
-                  className={`generate ${genBtn ? "" : "hidden"}`}
+                  text={getButtonText(index)}
+                  className={`generate`}
                 />
               ))}
               {/* <h2 className={`lose-msg ${losingMsgs ? "" : "hidden"}`}>

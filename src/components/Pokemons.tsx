@@ -14,39 +14,50 @@ interface Props {
 const Pokemons: React.FC<Props> = ({ newCard }) => {
   const [pokemons, setPokemons] = useState<PokemonData[] | null>(null);
   const [initialSlide, setInitialSlide] = useState<number>(0);
+  const [loading, setLoading] = useState<boolean>(true); // New loading state
   const swiperRef = useRef<any | null>(null);
 
   useEffect(() => {
-    // Initialize the Firebase database with the provided configuration
     const db = getDatabase(fire);
-
     const currentUser = auth.currentUser;
+
     if (currentUser) {
       const userUID = currentUser.uid;
       const collectionRef = ref(db, `users/${userUID}/pokemon`);
 
       const fetchData = () => {
+        setLoading(true); // Set loading to true when fetching starts
         onValue(collectionRef, async (snapshot) => {
           const dataItem = snapshot.val();
           console.log(dataItem, "display item");
 
           if (dataItem) {
-            // Convert the object values into an array
             const itemsArray: number[] = Object.values(dataItem);
             const fetchedPokemons = await Promise.all(
               itemsArray.map((id) => getPokemonData(id))
             );
             setInitialSlide(itemsArray.length);
             setPokemons(fetchedPokemons);
+          } else {
+            setPokemons([]); // No pokemons found
           }
+          setLoading(false); // Set loading to false after fetching
         });
       };
       fetchData();
+    } else {
+      setLoading(false); // Set loading to false if no current user
     }
-  }, [newCard]); // Watch for changes in newCard
+  }, [newCard]);
 
-  if (!pokemons || initialSlide === null) {
-    return <div className="spinner"></div>;
+  if (loading) {
+    return <div className="spinner"></div>; // Show spinner while loading
+  }
+
+  if (!loading && pokemons && pokemons.length === 0) {
+    return <div>
+      <p>No Pokémons yet</p>
+    </div>; // Show message if no pokemons
   }
 
   return (

@@ -21,6 +21,14 @@ body {
   border-radius: 8px;
 }
 
+.firebaseui-card-content {
+  padding: 24px;
+}
+
+.firebaseui-card-footer {
+  padding-bottom: 8px;
+}
+
 .container {
   padding: 2rem;
 }

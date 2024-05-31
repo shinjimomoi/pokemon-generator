@@ -1,3 +1,16 @@
+:root {
+  --background-color: #333;
+  --text-color: #fff;
+  --button: #fff;
+  --color-main: #404060;
+}
+
+[data-theme="light"] {
+  --background-color: #fff;
+  --text-color: #333;
+  --button: #333;
+}
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -6,7 +19,12 @@
 }
 
 body {
-  background-color: #fff;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+button {
+  color: var(--button);
 }
 
 /* Login */
@@ -33,10 +51,6 @@ body {
   padding: 2rem;
 }
 
-.container h1, .container p {
-  color: #333;
-}
-
 .container h1 {
   line-height: 3rem;
 }
@@ -49,7 +63,13 @@ body {
 
 .navbar button {
   background-color: transparent !important;
-  color: #333;
+}
+
+.navbar button:hover {
+  border: none;
+}
+.navbar button:focus-visible, .navbar button:focus {
+  outline: none;
 }
 
 .hidden {
@@ -64,6 +84,10 @@ li {
   list-style: none;
 }
 
+.pokemon-count {
+  margin-bottom: 0;
+}
+
 .card {
   padding: 2em;
 }
@@ -74,9 +98,9 @@ li {
 
 #card {
   position: relative;
-  padding: 24px;  
+  padding: 24px;
   border-radius: 8px;
-  background-color: #454545;  
+  background-color: #454545;
   margin: 24px;
 }
 
@@ -94,7 +118,7 @@ li {
 .hp {
   margin: 0;
   width: 80px;
-  background-color: #404060;
+  background-color: var(--color-main);
   color: #fff !important;
   text-align: center;
   padding: 8px 0;
@@ -104,6 +128,7 @@ li {
 }
 
 .poke-name {
+  color: #fff;
   margin: 0;
   text-align: center;
   font-weight: 900;
@@ -132,6 +157,7 @@ li {
 
 .stats h3 {
   margin: 0;
+  color: #fff;
 }
 
 .stats p {
@@ -151,7 +177,11 @@ li {
 }
 
 .btn {
-  background-color: #404060;
+  background-color: var(--color-main);
+}
+
+.btn.my-cards {
+  color: #fff;
 }
 
 .flex {
@@ -163,7 +193,7 @@ li {
   padding: 0;
   height: 200px;
   width: 120px;
-  background-color: #404060;
+  background-color: var(--color-main);
   color: #fff;
   font-size: 24px;
   font-weight: 900;
@@ -175,7 +205,7 @@ li {
 }
 
 .card-container {
-  position: relative;  
+  position: relative;
 }
 
 .cards {
@@ -187,7 +217,7 @@ li {
 .win-msg,
 .lose-msg {
   z-index: 100;
-  background-color: #404060e0;
+  background-color: var(--color-main)e0;
   border-radius: 8px;
   box-shadow: 0px 0px 29px rgba(0, 0, 0, 0.4);
   color: #ffffff;
@@ -202,7 +232,7 @@ li {
 
 .spinner {
   border: 16px solid rgba(0, 0, 0, 0.1);
-  border-left-color: #404060;
+  border-left-color: var(--color-main);
   border-radius: 50%;
   width: 100px;
   height: 100px;

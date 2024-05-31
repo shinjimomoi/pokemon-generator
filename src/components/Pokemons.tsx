@@ -61,32 +61,36 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
   }
 
   return (
-    <Swiper
-      ref={swiperRef}
-      spaceBetween={50}
-      slidesPerView={1}
-      initialSlide={newCard ? initialSlide : 0}
-      onSlideChange={() => console.log("slide change")}
-      onSwiper={(swiper) => console.log(swiper)}
-      loop={true}
-    >
-      {pokemons &&
-        pokemons.map((pokemon, index) => (
-          <li key={index}>
-            <SwiperSlide key={index} className="col-md-4 mb-4 blur">
-              <PokemonCard
-                hp={pokemon.stats[0].base_stat}
-                imgSrc={pokemon.sprites.front_default}
-                pokeName={pokemon.name}
-                statAttack={pokemon.stats[1].base_stat}
-                statDefense={pokemon.stats[2].base_stat}
-                statSpeed={pokemon.stats[5].base_stat}
-                types={pokemon.types}
-              />
-            </SwiperSlide>
-          </li>
-        ))}
-    </Swiper>
+
+    <>
+      <p className="pokemon-count">You have {pokemons?.length} Pokemon cards.</p>
+      <Swiper
+        ref={swiperRef}
+        spaceBetween={50}
+        slidesPerView={1}
+        initialSlide={newCard ? initialSlide : 0}
+        onSlideChange={() => console.log("slide change")}
+        onSwiper={(swiper) => console.log(swiper)}
+        loop={true}
+      >
+        {pokemons &&
+          pokemons.map((pokemon, index) => (
+            <li key={index}>
+              <SwiperSlide key={index} className="col-md-4 mb-4 blur">
+                <PokemonCard
+                  hp={pokemon.stats[0].base_stat}
+                  imgSrc={pokemon.sprites.front_default}
+                  pokeName={pokemon.name}
+                  statAttack={pokemon.stats[1].base_stat}
+                  statDefense={pokemon.stats[2].base_stat}
+                  statSpeed={pokemon.stats[5].base_stat}
+                  types={pokemon.types}
+                />
+              </SwiperSlide>
+            </li>
+          ))}
+      </Swiper>
+    </>
   );
 };
 

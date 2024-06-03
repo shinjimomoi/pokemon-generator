@@ -14,25 +14,24 @@ interface Props {
 const PokemonCard: React.FC<Props> = ({ hp, imgSrc, pokeName, statAttack, statDefense, statSpeed, types }) => {
   const [cardColor, setCardColor] = useState('#242424');
 
-  // Function to append types
-  const renderTypes = () => {
-    return types.map((item, index) => (
-      <span key={index} style={{color: cardColor}}>{capitalizeFirstLetter(item.type.name)}</span>
-    ));
-  };
+  useEffect(() => {
+    if (types.length > 0) {
+      styleCard(types[0].type.name);
+    }
+  }, [types]);
 
-  // Function to style card
   const styleCard = (type: string) => {
-    // Determine color based on types or any other criteria
-    const color = colorCard(type) || '#ffffff';  // Example color
+    const color = colorCard(type) || '#ffffff';
     setCardColor(color);
   };
 
-  useEffect(() => {
-    if (types.length > 0) {
-      styleCard(types[0].type.name); // Call the styleCard function when component mounts or types change
-    }
-  }, [types]);
+  const renderTypes = () => {
+    return types.map((item, index) => (
+      <span key={index} style={{ color: cardColor }}>
+        {capitalizeFirstLetter(item.type.name)}
+      </span>
+    ));
+  };
 
   return (
     <div id="card" style={{ background: `radial-gradient(circle at 50% 0%, ${cardColor} 36%, #404060 36%)` }}>
@@ -42,21 +41,19 @@ const PokemonCard: React.FC<Props> = ({ hp, imgSrc, pokeName, statAttack, statDe
       </p>
       <img src={imgSrc} alt={pokeName} />
       <h2 className="poke-name">{capitalizeFirstLetter(pokeName)}</h2>
-      <div className="types">
-        {renderTypes()}
-      </div>
+      <div className="types">{renderTypes()}</div>
       <div className="stats">
         <div>
           <h3>{statAttack}</h3>
-          <p style={{ color: cardColor}}>Attack</p>
+          <p style={{ color: cardColor }}>Attack</p>
         </div>
         <div>
           <h3>{statDefense}</h3>
-          <p style={{ color: cardColor}}>Defense</p>
+          <p style={{ color: cardColor }}>Defense</p>
         </div>
         <div>
           <h3>{statSpeed}</h3>
-          <p style={{ color: cardColor}}>Speed</p>
+          <p style={{ color: cardColor }}>Speed</p>
         </div>
       </div>
     </div>

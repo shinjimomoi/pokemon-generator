@@ -4,9 +4,8 @@ import { getRandomInt } from '../common';
 import { getDatabase, push, ref } from 'firebase/database';
 import { fetchPokemon } from './FetchPokemon';
 import { auth } from '../firebase';
-import Card from './Card';
-import Pokemons from './Pokemons';
 import Button from './Button';
+import Pokemons from './Pokemons';
 
 const Game: React.FC = () => {
   const [switchTab, setSwitchTab] = useState<boolean>(true);
@@ -63,6 +62,24 @@ const Game: React.FC = () => {
     }
   };
 
+  const getButtonText = (index: number) => {
+    if (losingMsgs[index]) {
+      return (
+        <>
+          Try<br />again!
+        </>
+      );
+    } else if (winningMsgs[index]) {
+      return (
+        <>
+          You<br />won!
+        </>
+      );
+    } else {
+      return "?";
+    }
+  };
+
   return (
     <div>
       <Button
@@ -72,7 +89,7 @@ const Game: React.FC = () => {
       />
       {switchTab ? (
         <div className="card-container">
-          <Pokemons newCard={newCard ? true : false} />
+          <Pokemons newCard={newCard} />
         </div>
       ) : (
         <div>
@@ -81,12 +98,11 @@ const Game: React.FC = () => {
           ) : (
             <div className="flex cards">
               {[0, 1, 2].map((index) => (
-                <Card
+                <Button
                   key={index}
-                  index={index}
-                  losingMsgs={losingMsgs}
-                  winningMsgs={winningMsgs}
-                  play={play}
+                  onClick={() => play(index)}
+                  text={getButtonText(index)}
+                  className={`btn-card`}
                 />
               ))}
             </div>

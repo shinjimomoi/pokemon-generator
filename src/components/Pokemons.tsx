@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { auth, fire } from "../firebase";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { getPokemonData } from "./FetchPokemon";
-import PokemonCard from "./Card";
+import PokemonCard from "./PokemonCard";
 import { PokemonData } from "../types";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";

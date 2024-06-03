@@ -3,12 +3,16 @@
   --text-color: #fff;
   --button: #fff;
   --color-main: #404060;
+  --door: #fff;
+  --border: solid 1px #333;
 }
 
 [data-theme="light"] {
   --background-color: #fff;
   --text-color: #333;
   --button: #333;
+  --door: transparent;
+  --border: solid 1px #333;
 }
 
 #root {
@@ -193,11 +197,14 @@ li {
   padding: 0;
   height: 200px;
   width: 120px;
-  background-color: var(--color-main);
-  color: #fff;
   font-size: 24px;
   font-weight: 900;
   transition: 0.4s;
+}
+
+.btn-card button, .buttons button {
+  background-color: var(--color-main);
+  color: #fff;
 }
 
 .btn-card button.playing {
@@ -214,19 +221,78 @@ li {
   justify-content: center;
 }
 
-.win-msg,
-.lose-msg {
-  z-index: 100;
-  background-color: var(--color-main)e0;
+.machine {
+  flex-direction: column;
+  align-items: center;
+}
+
+.doors {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin: 24px 0;
+}
+
+.door {
+  background-color: var(--door);
+  border: var(--border);
+  width: 100px;
+  height: 110px;
+  overflow: hidden;
   border-radius: 8px;
-  box-shadow: 0px 0px 29px rgba(0, 0, 0, 0.4);
+}
+
+.boxes {
+  transition: transform 1s ease-in-out;
+}
+
+.box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3rem;
+}
+
+.buttons {
+  margin: 1rem 0 2rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+}
+
+.buttons button {
+  cursor: pointer;
+  font-size: 1.2rem;
+  margin: 0 0.2rem;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 15px;
+}
+
+.info {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+
+#slot-machine {
+  position: relative;
+}
+
+.msg {
+  z-index: 100;
+  background-color: var(--color-main);
+  border-radius: 8px;
+  box-shadow: 0px 0px 29px rgba(107, 107, 107, 0.4);
   color: #ffffff;
   padding: 8px 16px;
   font-size: 24px;
   position: absolute;
-  width: 72%;
-  top: 50%;
+  width: auto;
   left: 50%;
+  top: 50%;
+  margin: 0;
   transform: translate(-50%, -50%);
 }
 
@@ -239,6 +305,22 @@ li {
   animation: spin 1s linear infinite;
   margin: auto;
   margin-top: 180px;
+}
+
+#spinner {
+  background-color: #00a382;
+  /* animation: spin 4s linear infinite; */
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+}
+
+#reseter {
+  background-color: var(--color-main);
+  /* animation: spin 4s linear infinite; */
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
 }
 
 @keyframes spin {

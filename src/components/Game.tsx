@@ -5,6 +5,7 @@ import { fetchPokemon } from './FetchPokemon';
 import { auth } from '../firebase';
 import Button from './Button';
 import Pokemons from './Pokemons';
+import SlotMachine from './SlotMachine';
 
 const Game: React.FC = () => {
   const [switchTab, setSwitchTab] = useState<boolean>(true);
@@ -93,16 +94,7 @@ const Game: React.FC = () => {
           {loading ? (
             <div className="spinner"></div>
           ) : (
-            <div className="flex cards">
-              {[0, 1, 2].map((index) => (
-                <Button
-                  key={index}
-                  onClick={() => play(index)}
-                  text={getButtonText(index)}
-                  className={`btn-card`}
-                />
-              ))}
-            </div>
+            <SlotMachine handleFetchPokemon={handleFetchPokemon} />
           )}
         </div>
       )}

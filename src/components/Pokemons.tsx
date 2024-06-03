@@ -1,17 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { auth, fire } from "../firebase";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue, off } from "firebase/database";
 import { getPokemonData } from "./FetchPokemon";
 import PokemonCard from "./PokemonCard";
 import { PokemonData } from "../types";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 
-interface Props {
-  newCard: boolean;
-}
-
-const Pokemons: React.FC<Props> = ({ newCard }) => {
+const Pokemons: React.FC = () => {
   const [pokemons, setPokemons] = useState<PokemonData[] | null>(null);
   const [initialSlide, setInitialSlide] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true); // New loading state
@@ -26,7 +22,6 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
       const collectionRef = ref(db, `users/${userUID}/pokemon`);
 
       const fetchData = () => {
-        setLoading(true); // Set loading to true when fetching starts
         onValue(collectionRef, async (snapshot) => {
           const dataItem = snapshot.val();
           console.log(dataItem, "display item");
@@ -39,16 +34,20 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
             setInitialSlide(itemsArray.length);
             setPokemons(fetchedPokemons);
           } else {
-            setPokemons([]); // No pokemons found
+            setPokemons([]);
           }
-          setLoading(false); // Set loading to false after fetching
+          setLoading(false);
         });
       };
       fetchData();
-    } else {
-      setLoading(false); // Set loading to false if no current user
-    }
-  }, [newCard]);
+    } 
+
+    return () => {
+      if (currentUser) {
+        off(ref(db, `users/${currentUser.uid}/pokemon`));
+      }
+    };
+  }, []);
 
   if (loading) {
     return <div className="spinner"></div>; // Show spinner while loading
@@ -68,7 +67,7 @@ const Pokemons: React.FC<Props> = ({ newCard }) => {
         ref={swiperRef}
         spaceBetween={50}
         slidesPerView={1}
-        initialSlide={newCard ? initialSlide : 0}
+        initialSlide={initialSlide ? initialSlide : 0}
         onSlideChange={() => console.log("slide change")}
         onSwiper={(swiper) => console.log(swiper)}
         loop={true}

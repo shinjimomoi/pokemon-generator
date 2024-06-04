@@ -1,18 +1,22 @@
 :root {
   --background-color: #333;
   --text-color: #fff;
+  --gray: #4c4c4c;
   --button: #fff;
   --color-main: #404060;
   --door: #fff;
   --border: solid 1px #333;
+  --accent: #ffae00;
 }
 
 [data-theme="light"] {
   --background-color: #fff;
   --text-color: #333;
+  --gray: #dfdfdf;
   --button: #333;
   --door: transparent;
   --border: solid 1px #333;
+  --accent: #404060;
 }
 
 #root {
@@ -29,6 +33,10 @@ body {
 
 button {
   color: var(--button);
+}
+
+ul {
+  padding: 0;
 }
 
 /* Login */
@@ -61,8 +69,28 @@ button {
 
 .navbar {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar .btns {
+  display: flex;
   justify-content: end;
   padding: 8px;
+}
+
+.navbar .balance {
+  display: flex;
+  justify-content: end;
+  padding: 8px;
+  h3 {
+    background-color: var(--gray);
+    color: var(--accent);
+    padding: 4px 8px;
+    border-radius: 8px;
+    margin: 0;
+    font-size: 16px;
+  }
 }
 
 .navbar button {
@@ -308,7 +336,7 @@ li {
 }
 
 #spinner {
-  background-color: #00a382;
+  background-color: var(--accent);
   /* animation: spin 4s linear infinite; */
   border-radius: 50%;
   width: 80px;

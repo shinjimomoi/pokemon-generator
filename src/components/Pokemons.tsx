@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { auth, fire } from "../firebase";
 import { getDatabase, ref, onValue, off } from "firebase/database";
-import { getPokemonData } from "./FetchPokemon";
+import { getPokemonData } from "../useFetchPokemon";
 import PokemonCard from "./PokemonCard";
 import { PokemonData } from "../types";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -19,10 +19,9 @@ const Pokemons: React.FC = () => {
 
     if (currentUser) {
       const userUID = currentUser.uid;
-      const collectionRef = ref(db, `users/${userUID}/pokemon`);
-
+      const pokemonCollectionRef = ref(db, `users/${userUID}/pokemon`);
       const fetchData = () => {
-        onValue(collectionRef, async (snapshot) => {
+        onValue(pokemonCollectionRef, async (snapshot) => {
           const dataItem = snapshot.val();
           console.log(dataItem, "display item");
 
@@ -62,6 +61,7 @@ const Pokemons: React.FC = () => {
   return (
 
     <>
+      <h2>My Cards</h2>
       <p className="pokemon-count">You have {pokemons?.length} Pokemon cards.</p>
       <Swiper
         ref={swiperRef}

@@ -8,20 +8,20 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon }) => {
   const [message, setMessage] = useState<string>("");
   const doorsRef = useRef<HTMLDivElement[]>([]);
   const items = [
-    "💎",
-    "🔔",
+    // "💎",
+    // "🔔",
     "🍒",
-    "💎",
-    "🔔",
+    // "💎",
+    // "🔔",
     "🍒",
-    "💎",
-    "🔔",
+    // "💎",
+    // "🔔",
     "🍒",
-    "💎",
-    "🔔",
+    // "💎",
+    // "🔔",
     "🍒",
-    "💎",
-    "🔔",
+    // "💎",
+    // "🔔",
     "🍒",
   ];
 
@@ -33,7 +33,9 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon }) => {
     const doors = document.querySelectorAll<HTMLDivElement>(".door");
     doorsRef.current = Array.from(doors);
     const arr: string[] = [];
+    const reelsArr: string[] = [];
     setMessage("");
+    console.log(message, "the message should be empty")
 
     for (const door of doorsRef.current) {
       if (reset) {
@@ -95,11 +97,11 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon }) => {
       door.replaceChild(boxesClone, boxes);
       const el: string =
         door.querySelector<HTMLDivElement>("div.box")?.innerHTML ?? "";
-      arr.push(el);
-      if (!reset && arr.length === 3) {
-        console.log(arr, "arr");
-        if (arr.every((val, _, arr) => val === arr[0] && val !== "❓")) {
+      reelsArr.push(el);
+      if (!reset && reelsArr.length === 3) {
+        if (reelsArr.every((val, _, arr) => val === arr[0] && val !== "❓")) {
           setTimer(1600, () => setMessage("You Won!"));
+
           setTimer(2400, handleFetchPokemon);
         } else {
           setTimer(1400, () => setMessage("Try Again!"));
@@ -108,7 +110,9 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon }) => {
     }
   };
 
+ 
   async function spin() {
+    console.log("spinning")
     init(false, 1, 1);
 
     for (const door of doorsRef.current) {
@@ -161,6 +165,8 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon }) => {
       </div>
     </div>
   );
+  
 };
+
 
 export default SlotMachine;

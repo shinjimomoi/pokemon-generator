@@ -9,10 +9,10 @@ import Navbar from './components/Navbar';
 const App: React.FC = () => {
   const [user, setUser] = useState<firebase.User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeSection, setActiveSection] = useState<string>('game');
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {
-      console.log('User authenticated:', authUser);
       setUser(authUser);
       setLoading(false);
     });
@@ -20,15 +20,14 @@ const App: React.FC = () => {
     return () => unsubscribe();
   }, []);
 
-
-  if (loading) {
+  if (loading) { // Check balanceLoading state as well
     return <div className="spinner"></div>
   }
 
   return (
     <div className="App">
-      {user ? <Navbar /> : null }
-      {user ? <Page /> : <Auth />}
+      {user ? <Navbar setActiveSection={setActiveSection} activeSection={activeSection} /> : null }
+      {user ? <Page activeSection={activeSection} /> : <Auth />}
     </div>
   );
 };

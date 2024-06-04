@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { PokemonData } from '../types';
+import { PokemonData } from './types';
 
-const fetchPokemon = async (id?: number): Promise<PokemonData> => {
-  console.log("fetching from pokemon api")
+const useFetchPokemon = async (id?: number): Promise<PokemonData> => {
   let randomId: number;
   if (id) {
     randomId = id;
@@ -18,20 +17,20 @@ const getPokemonData = async (id?: number) => {
   // Check if data is in local storage
   const cachedData = localStorage.getItem(`pokemon_${id}`);
   if (cachedData) {
-    console.log("fetching from local storage")
+    // console.log("fetching from local storage")
     return JSON.parse(cachedData);
   }
 
   // If not, fetch from API
-  const data = await fetchPokemon(id);
+  const data = await useFetchPokemon(id);
 
   try {
     // Store fetched data in local storage
     localStorage.setItem(`pokemon_${id}`, JSON.stringify(data));
   } catch(e) {
-    console.log("Local Storage is full, Please empty data");
+    // console.log("Local Storage is full, Please empty data");
   }
   return data;
 };
 
-export { getPokemonData, fetchPokemon };
+export { getPokemonData, useFetchPokemon };

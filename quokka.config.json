@@ -1,0 +1,22 @@
+{
+  "pro": false,
+  "typescript": {
+    "compilerOptions": {
+      "jsx": "react",
+      "module": "commonjs",
+      "target": "es6",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true
+    }
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-react"
+    ]
+  },
+  "env": {
+    "type": "node",
+    "runner": "node"
+  }
+}

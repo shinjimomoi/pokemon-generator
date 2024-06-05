@@ -5,6 +5,7 @@ import Auth from './components/Auth';
 import { auth } from './firebase';
 import firebase from 'firebase/compat/app';
 import Navbar from './components/Navbar';
+import Loading from './components/Loading';
 
 const App: React.FC = () => {
   const [user, setUser] = useState<firebase.User | null>(null);
@@ -21,7 +22,7 @@ const App: React.FC = () => {
   }, []);
 
   if (loading) { // Check balanceLoading state as well
-    return <div className="spinner"></div>
+    return <Loading message="Loading cards..."/>
   }
 
   return (

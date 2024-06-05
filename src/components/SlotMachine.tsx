@@ -2,27 +2,20 @@ import React, { useEffect, useRef, useState } from "react";
 
 interface SlotMachineProps {
   handleFetchPokemon: () => void;
+  deductBalance: () => void;
+  addBalance: (balance: number) => void;
 }
 
-const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon }) => {
+const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon, deductBalance, addBalance }) => {
   const [message, setMessage] = useState<string>("");
   const doorsRef = useRef<HTMLDivElement[]>([]);
   const items = [
-    // "💎",
-    // "🔔",
+    "💎",
     "🍒",
-    // "💎",
-    // "🔔",
+    "🔔",
+    "🔔",
     "🍒",
-    // "💎",
-    // "🔔",
-    "🍒",
-    // "💎",
-    // "🔔",
-    "🍒",
-    // "💎",
-    // "🔔",
-    "🍒",
+    "🔔",
   ];
 
   useEffect(() => {
@@ -100,19 +93,31 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon }) => {
       reelsArr.push(el);
       if (!reset && reelsArr.length === 3) {
         if (reelsArr.every((val, _, arr) => val === arr[0] && val !== "❓")) {
-          setTimer(1600, () => setMessage("You Won!"));
-
-          setTimer(2400, handleFetchPokemon);
+          const combination = reelsArr.join("");
+          switch (combination) {
+            case "💎💎💎":
+              setTimer(1200, () => setMessage("You won a card!"));
+              setTimer(2400, handleFetchPokemon);
+              break;
+            case "🍒🍒🍒":
+              setTimer(1200, () => {setMessage("You won $500!"); addBalance(500);});
+            break;
+            case "🔔🔔🔔":
+              setTimer(1200, () => {setMessage("You won $300!"); addBalance(300);});
+              break;
+            default:
+              setMessage("You Won! +$500");
+              break;
+          }
         } else {
-          setTimer(1400, () => setMessage("Try Again!"));
+          setTimer(1400, () => setMessage("Try Again!"));          
         }
       }
     }
   };
 
- 
   async function spin() {
-    console.log("spinning")
+    deductBalance()
     init(false, 1, 1);
 
     for (const door of doorsRef.current) {
@@ -143,6 +148,7 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon }) => {
 
   return (
     <div id="slot-machine">
+      <p>You have to pay $100 to play.</p>
       <div className="doors">
         <div className="door" ref={(el) => el && (doorsRef.current[0] = el)}>
           <div className="boxes"></div>

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { getRandomInt } from '../common';
 import { get, getDatabase, push, ref, set } from 'firebase/database';
 import { useFetchPokemon } from '../useFetchPokemon';
 import { auth } from '../firebase';
 import Button from './Button';
 import Pokemons from './Pokemons';
 import SlotMachine from './SlotMachine';
+import Loading from './Loading';
 
 const Game: React.FC = () => {
   const [switchTab, setSwitchTab] = useState<boolean>(true);
@@ -13,6 +13,52 @@ const Game: React.FC = () => {
 
   const showPokemons = () => {
     setSwitchTab(!switchTab);
+  };
+
+  const deductBalance = async () => {
+    try {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        const userUID = currentUser.uid;
+        const db = getDatabase();
+        const userBalanceRef = ref(db, `users/${userUID}/balance`);
+        
+        // Fetch current user balance
+        const snapshot = await get(userBalanceRef);
+        const currentBalance = snapshot.val();
+
+        // Deduct balance by 1 unit
+        const newBalance = (currentBalance || 0) - 100;
+
+        // Set the new balance in the database
+        await set(userBalanceRef, newBalance);
+      }
+    } catch (error) {
+      console.error('Error deducting balance:', error);
+    }
+  };
+  
+  const addBalance = async (value:number) => {
+    try {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        const userUID = currentUser.uid;
+        const db = getDatabase();
+        const userBalanceRef = ref(db, `users/${userUID}/balance`);
+        
+        // Fetch current user balance
+        const snapshot = await get(userBalanceRef);
+        const currentBalance = snapshot.val();
+
+        // Deduct balance by 1 unit
+        const newBalance = (currentBalance || 0) + value;
+
+        // Set the new balance in the database
+        await set(userBalanceRef, newBalance);
+      }
+    } catch (error) {
+      console.error('Error deducting balance:', error);
+    }
   };
 
   const handleFetchPokemon = async () => {
@@ -24,22 +70,13 @@ const Game: React.FC = () => {
         const userUID = currentUser.uid;
         const db = getDatabase();
         const userPokemonRef = ref(db, `users/${userUID}/pokemon`);
-        let userBalanceRef = ref(db, `users/${userUID}/balance`);
         await push(userPokemonRef, data.id);
-        // Fetch current user balance
-        const snapshot = await get(userBalanceRef);
-        const currentBalance = snapshot.val();
-
-        // Update user balance by adding 500
-        const newBalance = (currentBalance || 0) + 500;
-
-        // Set the new balance in the database
-        await set(userBalanceRef, newBalance);
       }
     } catch (error) {
-      console.error("Error fetching Pokémon:", error);
+      setLoading(false);
     } finally {
       setLoading(false);
+      console.log("should switch tab!")
       setSwitchTab(true); // Switch to the collection view after fetching the Pokémon
     }
   };
@@ -53,9 +90,9 @@ const Game: React.FC = () => {
       ) : (
         <div>
           {loading ? (
-            <div className="spinner"></div>
+            <Loading message="Loading cards..."/>
           ) : (
-            <SlotMachine handleFetchPokemon={handleFetchPokemon} />
+            <SlotMachine handleFetchPokemon={handleFetchPokemon} deductBalance={deductBalance} addBalance={addBalance} />
           )}
         </div>
       )}

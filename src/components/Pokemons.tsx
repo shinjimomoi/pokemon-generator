@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { auth, fire } from "../firebase";
 import { getDatabase, ref, onValue, off } from "firebase/database";
-import { getPokemonData } from "../useFetchPokemon";
+import { getPokemonData } from "../pokemonService";
 import PokemonCard from "./PokemonCard";
 import { PokemonData } from "../types";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -42,7 +42,9 @@ const Pokemons: React.FC = () => {
             } else {
               setPokemons([]);
             }
-            setLoading(false);
+            setTimeout(() => {
+              setLoading(false);              
+            }, 500);
           } catch (error) {
             setError("Failed to fetch Pokémon data. Please try again.");
             setTimeout(() => {
@@ -92,6 +94,7 @@ const Pokemons: React.FC = () => {
                     statDefense={pokemon.stats[2].base_stat}
                     statSpeed={pokemon.stats[5].base_stat}
                     types={pokemon.types}
+                    isNewCard={index === pokemons.length - 1}
                   />
                 </SwiperSlide>
               ))}

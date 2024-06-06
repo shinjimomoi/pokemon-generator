@@ -22,7 +22,7 @@ const App: React.FC = () => {
   }, []);
 
   if (loading) { // Check balanceLoading state as well
-    return <Loading message="Loading cards..."/>
+    return <Loading message="Loading app..."/>
   }
 
   return (

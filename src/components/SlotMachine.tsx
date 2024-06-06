@@ -1,21 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
+import { addPokemon, changeBalance } from '../pokemonService';
+
 
 interface SlotMachineProps {
   handleFetchPokemon: () => void;
-  deductBalance: () => void;
-  addBalance: (balance: number) => void;
 }
 
-const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon, deductBalance, addBalance }) => {
+const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon }) => {
   const [message, setMessage] = useState<string>("");
   const doorsRef = useRef<HTMLDivElement[]>([]);
   const items = [
-    "💎",
+    // "💎",
+    // "🔔",
     "🍒",
-    "🔔",
-    "🔔",
-    "🍒",
-    "🔔",
+    // "🔔",
+    // "🍒",
+    // "🔔",
+    // "🔔",
+    // "💎",
+    // "🍒",
+    // "🔔",
   ];
 
   useEffect(() => {
@@ -28,7 +32,6 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon, deductBal
     const arr: string[] = [];
     const reelsArr: string[] = [];
     setMessage("");
-    console.log(message, "the message should be empty")
 
     for (const door of doorsRef.current) {
       if (reset) {
@@ -100,10 +103,10 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon, deductBal
               setTimer(2400, handleFetchPokemon);
               break;
             case "🍒🍒🍒":
-              setTimer(1200, () => {setMessage("You won $500!"); addBalance(500);});
+              setTimer(1200, () => {setMessage("You won $500!"); changeBalance(500);});
             break;
             case "🔔🔔🔔":
-              setTimer(1200, () => {setMessage("You won $300!"); addBalance(300);});
+              setTimer(1200, () => {setMessage("You won $300!"); changeBalance(300);});
               break;
             default:
               setMessage("You Won! +$500");
@@ -117,7 +120,7 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon, deductBal
   };
 
   async function spin() {
-    deductBalance()
+    changeBalance(-100)
     init(false, 1, 1);
 
     for (const door of doorsRef.current) {

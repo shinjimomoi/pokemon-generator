@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { get, getDatabase, push, ref, set } from 'firebase/database';
-import { useFetchPokemon } from '../useFetchPokemon';
+import { useFetchPokemon } from '../pokemonService';
 import { auth } from '../firebase';
 import Button from './Button';
 import Pokemons from './Pokemons';
@@ -13,52 +13,6 @@ const Game: React.FC = () => {
 
   const showPokemons = () => {
     setSwitchTab(!switchTab);
-  };
-
-  const deductBalance = async () => {
-    try {
-      const currentUser = auth.currentUser;
-      if (currentUser) {
-        const userUID = currentUser.uid;
-        const db = getDatabase();
-        const userBalanceRef = ref(db, `users/${userUID}/balance`);
-        
-        // Fetch current user balance
-        const snapshot = await get(userBalanceRef);
-        const currentBalance = snapshot.val();
-
-        // Deduct balance by 1 unit
-        const newBalance = (currentBalance || 0) - 100;
-
-        // Set the new balance in the database
-        await set(userBalanceRef, newBalance);
-      }
-    } catch (error) {
-      console.error('Error deducting balance:', error);
-    }
-  };
-  
-  const addBalance = async (value:number) => {
-    try {
-      const currentUser = auth.currentUser;
-      if (currentUser) {
-        const userUID = currentUser.uid;
-        const db = getDatabase();
-        const userBalanceRef = ref(db, `users/${userUID}/balance`);
-        
-        // Fetch current user balance
-        const snapshot = await get(userBalanceRef);
-        const currentBalance = snapshot.val();
-
-        // Deduct balance by 1 unit
-        const newBalance = (currentBalance || 0) + value;
-
-        // Set the new balance in the database
-        await set(userBalanceRef, newBalance);
-      }
-    } catch (error) {
-      console.error('Error deducting balance:', error);
-    }
   };
 
   const handleFetchPokemon = async () => {
@@ -92,7 +46,7 @@ const Game: React.FC = () => {
           {loading ? (
             <Loading message="Loading cards..."/>
           ) : (
-            <SlotMachine handleFetchPokemon={handleFetchPokemon} deductBalance={deductBalance} addBalance={addBalance} />
+            <SlotMachine handleFetchPokemon={handleFetchPokemon} />
           )}
         </div>
       )}

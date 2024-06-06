@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useFetchPokemon } from '../useFetchPokemon';
+import { useFetchPokemon, addPokemon, changeBalance } from '../pokemonService';
 import PokemonCard from './PokemonCard';
 import Loading from './Loading';
 import { PokemonData } from "../types";
@@ -10,19 +10,21 @@ import Button from './Button';
 const PokemonMarket: React.FC = () => {
   const [pokemons, setPokemons] = useState<PokemonData[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedPokemon, setSelectedPokemon] = useState<PokemonData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const swiperRef = useRef<any | null>(null);
+
 
   const handleFetchPokemon = async () => {
     setPokemons([]);
     setLoading(true);
     setError(null); // Reset error state before fetching data
 
-    const cardNumber = 5;
+    const dailyCardNumber = 5;
     const data: PokemonData[] = [];
 
     try {
-      for (let i = 0; i < cardNumber; i++) {
+      for (let i = 0; i < dailyCardNumber; i++) {
         const pokemon = await useFetchPokemon();
         data.push(pokemon);
       }
@@ -42,9 +44,15 @@ const PokemonMarket: React.FC = () => {
   },[])
 
   const BuyPokemon = () => {
-    console.log("buy this one")
+    selectedPokemon && addPokemon(selectedPokemon);
+    changeBalance(500);
   }
-    
+
+  const handleSlideChange = (swiper: any) => {
+    const activeIndex = swiper.realIndex;
+    setSelectedPokemon(pokemons[activeIndex]);
+  };
+  
   return (
     <>
       <h2>Cards to buy</h2>
@@ -59,8 +67,8 @@ const PokemonMarket: React.FC = () => {
             ref={swiperRef}
             spaceBetween={50}
             slidesPerView={1}
-            onSlideChange={() => console.log("slide change")}
-            onSwiper={(swiper) => console.log(swiper)}
+            onSlideChange={handleSlideChange}
+            onSwiper={(swiper) => setSelectedPokemon(pokemons[swiper.realIndex])} // Set initial selected Pokemon
             loop={true}
           >
             {pokemons &&
@@ -75,6 +83,7 @@ const PokemonMarket: React.FC = () => {
                       statDefense={pokemon.stats[2].base_stat}
                       statSpeed={pokemon.stats[5].base_stat}
                       types={pokemon.types}
+                      // onClick={() => setSelectedPokemon(pokemon)} // Set selectedPokemon when clicked
                     />
                   </SwiperSlide>
                 </li>

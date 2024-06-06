@@ -9,9 +9,11 @@ interface Props {
   statDefense: number;
   statSpeed: number;
   types: { type: { name: string } }[];
+  isNewCard?: boolean;
+  onClick?: () => void;
 }
 
-const PokemonCard: React.FC<Props> = ({ hp, imgSrc, pokeName, statAttack, statDefense, statSpeed, types }) => {
+const PokemonCard: React.FC<Props> = ({ hp, imgSrc, pokeName, statAttack, statDefense, statSpeed, types, isNewCard, onClick }) => {
   const [cardColor, setCardColor] = useState('#242424');
 
   useEffect(() => {
@@ -34,7 +36,12 @@ const PokemonCard: React.FC<Props> = ({ hp, imgSrc, pokeName, statAttack, statDe
   };
 
   return (
-    <div id="card" style={{ background: `radial-gradient(circle at 50% 0%, ${cardColor} 36%, #404060 36%)` }}>
+    <div id="card" style={{ background: `radial-gradient(circle at 50% 0%, ${cardColor} 36%, #404060 36%)` }} onClick={onClick}>
+      {isNewCard && (
+        <div className="ribbon ribbon-top-left">
+          <span>New</span>
+        </div>
+      )}
       <p className="hp">
         <span>HP</span>
         {hp}

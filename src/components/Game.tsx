@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-import { get, getDatabase, push, ref, set } from 'firebase/database';
-import { useFetchPokemon } from '../pokemonService';
-import { auth } from '../firebase';
+import { useFetchPokemon, addPokemon } from '../pokemonService';
 import Button from './Button';
 import Pokemons from './Pokemons';
 import SlotMachine from './SlotMachine';
-import Loading from './Loading';
 
 const Game: React.FC = () => {
   const [switchTab, setSwitchTab] = useState<boolean>(true);
@@ -15,24 +12,10 @@ const Game: React.FC = () => {
     setSwitchTab(!switchTab);
   };
 
-  const handleFetchPokemon = async () => {
-    setLoading(true);
-    try {
-      const currentUser = auth.currentUser;
-      if (currentUser) {
-        const data = await useFetchPokemon();
-        const userUID = currentUser.uid;
-        const db = getDatabase();
-        const userPokemonRef = ref(db, `users/${userUID}/pokemon`);
-        await push(userPokemonRef, data.id);
-      }
-    } catch (error) {
-      setLoading(false);
-    } finally {
-      setLoading(false);
-      console.log("should switch tab!")
-      setSwitchTab(true); // Switch to the collection view after fetching the Pokémon
-    }
+  const handleGetPokemon = async () => {
+      const data = await useFetchPokemon();
+      addPokemon(data);
+      setSwitchTab(true);
   };
 
   return (
@@ -43,11 +26,7 @@ const Game: React.FC = () => {
         </div>
       ) : (
         <div>
-          {loading ? (
-            <Loading message="Loading cards..."/>
-          ) : (
-            <SlotMachine handleFetchPokemon={handleFetchPokemon} />
-          )}
+          <SlotMachine handleGetPokemon={handleGetPokemon} />
         </div>
       )}
       <Button

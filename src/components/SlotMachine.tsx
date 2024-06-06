@@ -3,16 +3,16 @@ import { addPokemon, changeBalance } from '../pokemonService';
 
 
 interface SlotMachineProps {
-  handleFetchPokemon: () => void;
+  handleGetPokemon: () => void;
 }
 
-const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon }) => {
+const SlotMachine: React.FC<SlotMachineProps> = ({ handleGetPokemon }) => {
   const [message, setMessage] = useState<string>("");
   const doorsRef = useRef<HTMLDivElement[]>([]);
   const items = [
-    // "💎",
+    "💎",
     // "🔔",
-    "🍒",
+    // "🍒",
     // "🔔",
     // "🍒",
     // "🔔",
@@ -100,7 +100,7 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleFetchPokemon }) => {
           switch (combination) {
             case "💎💎💎":
               setTimer(1200, () => setMessage("You won a card!"));
-              setTimer(2400, handleFetchPokemon);
+              setTimer(2400, handleGetPokemon);
               break;
             case "🍒🍒🍒":
               setTimer(1200, () => {setMessage("You won $500!"); changeBalance(500);});

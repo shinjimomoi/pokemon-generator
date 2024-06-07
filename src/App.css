@@ -75,12 +75,14 @@ ul {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 16px;
 }
 
 .navbar .btns {
   display: flex;
   justify-content: end;
   padding: 8px;
+  gap: 16px;
 }
 
 .navbar .balance {
@@ -97,14 +99,25 @@ ul {
   }
 }
 
+button {
+  border: none;
+}
+
 .navbar button {
   background-color: transparent !important;
+  padding: 0;
+  color: var(--button);
 }
 
 button:hover {
   border: none !important;
+  outline: none !important;
 }
-button:focus-visible, button:focus {
+button:focus-visible, button:focus, button:hover {
+  outline: none !important;
+}
+
+button {
   outline: none !important;
 }
 
@@ -290,6 +303,8 @@ li {
   background-color: var(--color-main);
   color: #fff;
 }
+
+
 
 .btn-card button.playing {
   transform: scale(1.4);

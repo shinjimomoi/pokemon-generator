@@ -1,21 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useFetchPokemon, addPokemon, changeBalance } from '../pokemonService';
+import { useFetchPokemon, addPokemon, changeBalance, resetShopAndAddVisitedTime, getShopVisitedTime, getShop } from '../pokemonService';
 import PokemonCard from './PokemonCard';
 import Loading from './Loading';
 import { PokemonData } from "../types";
 import { useRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Button from './Button';
+import { capitalizeFirstLetter } from '../common';
 
 const PokemonMarket: React.FC = () => {
   const [pokemons, setPokemons] = useState<PokemonData[]>([]);
+  const [buyingMsg, setBuyingMsg] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedPokemon, setSelectedPokemon] = useState<PokemonData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const swiperRef = useRef<any | null>(null);
 
-
-  const handleFetchPokemon = async () => {
+  const fetchFivePokemons = async () => {
     setPokemons([]);
     setLoading(true);
     setError(null); // Reset error state before fetching data
@@ -29,23 +30,75 @@ const PokemonMarket: React.FC = () => {
         data.push(pokemon);
       }
 
-      setPokemons(data); // Set the fetched pokemons
+      // setPokemons(data); // Set the fetched pokemons
+      resetShopAndAddVisitedTime(data)
     } catch (err) {
       setError("Failed to fetch Pokémon data. Please try again.");
     } finally {
       setTimeout(() => {
         setLoading(false);
-      }, 1000);
+      }, 800);
+    }
+  };
+
+  const removeOnePokemon = async (pokemon: PokemonData | null) => {
+    setLoading(true);
+    setError(null); // Reset error state before fetching data
+    try {
+      setPokemons(prevPokemons => prevPokemons.filter(p => p.id !== pokemon?.id));
+    } catch (err) {
+      setError("Failed to fetch Pokémon data. Please try again.");
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 1200);
+    }
+  };
+
+  const fetchPokemonsIfNeeded = async () => {
+    try {
+      const currentVisitedTimestamp = await getShopVisitedTime();
+      const currentTime = Date.now();
+      const tenMinutes = 10 * 60000;
+      if (!currentVisitedTimestamp || currentTime - currentVisitedTimestamp >= tenMinutes) {
+        await fetchFivePokemons();
+      } else {
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error fetching pokemons:", error);
+      setError("Failed to fetch Pokémon data. Please try again.");
+      setLoading(false);
+    } finally {
+      const fetchedPokemons = await getShop();
+      setPokemons(fetchedPokemons);
     }
   };
 
   useEffect(() => {
-    handleFetchPokemon()
+    fetchPokemonsIfNeeded();
   },[])
 
-  const BuyPokemon = () => {
-    selectedPokemon && addPokemon(selectedPokemon);
-    changeBalance(500);
+  const BuyPokemon = async() => {
+    if(selectedPokemon) {
+      const balanceChanged = await changeBalance(-3000);
+      if (!balanceChanged) {
+        console.error('Insufficient balance');
+        setBuyingMsg('Insufficient money to buy this Pokémon.');
+        setTimeout(() => {
+          setBuyingMsg('');        
+        }, 1200);
+        return;
+      }
+      const {name} = selectedPokemon
+      addPokemon(selectedPokemon);
+      resetShopAndAddVisitedTime(pokemons.filter((pok: PokemonData) => pok !== selectedPokemon));
+      removeOnePokemon(selectedPokemon);
+      setBuyingMsg(`You got ${capitalizeFirstLetter(name)}. Adding to your collection`)
+      setTimeout(() => {
+        setBuyingMsg('');        
+      }, 1200);
+    } 
   }
 
   const handleSlideChange = (swiper: any) => {
@@ -55,9 +108,9 @@ const PokemonMarket: React.FC = () => {
   
   return (
     <>
-      <h2>Cards to buy</h2>
+      <h1>Shop</h1>
       {loading ? (
-        <Loading message="Loading cards..."/>
+        <Loading message={buyingMsg}/>
       ) : error ? (
         <div className="error">{error}</div>
       ) : (
@@ -83,12 +136,12 @@ const PokemonMarket: React.FC = () => {
                       statDefense={pokemon.stats[2].base_stat}
                       statSpeed={pokemon.stats[5].base_stat}
                       types={pokemon.types}
-                      // onClick={() => setSelectedPokemon(pokemon)} // Set selectedPokemon when clicked
                     />
                   </SwiperSlide>
                 </li>
               ))}
           </Swiper>
+          {buyingMsg && <h2 className="msg">{buyingMsg}</h2>}
           <Button onClick={BuyPokemon} text={"Buy"} className={"buy"} />
         </div>
       )}

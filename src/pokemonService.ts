@@ -35,6 +35,64 @@ const getPokemonData = async (id?: number) => {
   return data;
 };
 
+const getShopVisitedTime = async () => {
+  try {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const userUID = currentUser.uid;
+      const db = getDatabase();
+      const userTimestampRef = ref(db, `users/${userUID}/visited`);
+      
+      // Fetch current user balance
+      const snapshot = await get(userTimestampRef);
+      const currentVisitedTimestamp = snapshot.val();
+      return currentVisitedTimestamp;
+    }
+  } catch(e) {
+    // console.log("Local Storage is full, Please empty data");
+  }
+};
+
+const resetShopAndAddVisitedTime = async (pokemons: PokemonData[], bought?:false) => {
+  try {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const userUID = currentUser.uid;
+      const db = getDatabase();
+
+      // Update shop collection
+      const userShopRef = ref(db, `users/${userUID}/shop`);
+      await set(userShopRef, pokemons);
+
+      if (!bought) {
+        // Add visited timestamp
+        const userTimestampRef = ref(db, `users/${userUID}/visited`);
+        await set(userTimestampRef, Date.now());
+      }
+    }
+  } catch (error) {
+    console.error("Error resetting shop and adding visited time:", error);
+  }
+};
+
+const getShop = async () => {
+  try {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const userUID = currentUser.uid;
+      const db = getDatabase();
+      const userShopRef = ref(db, `users/${userUID}/shop`);
+      
+      // Fetch current user balance
+      const snapshot = await get(userShopRef);
+      const currentShop = snapshot.val();
+      return currentShop;
+    }
+  } catch(e) {
+    // console.log("Local Storage is full, Please empty data");
+  }
+};
+
 const addPokemon = async(pokemon: PokemonData) => {
   console.log(`adding ${pokemon.name} to collection`)
   try {
@@ -51,7 +109,6 @@ const addPokemon = async(pokemon: PokemonData) => {
 };
 
 const changeBalance = async(amount: number) => {
-  console.log(`deducting ${amount} from balance`)
   try {
     const currentUser = auth.currentUser;
     if (currentUser) {
@@ -64,7 +121,9 @@ const changeBalance = async(amount: number) => {
       const currentBalance = snapshot.val();
 
       // Check if the user has enough balance
-      if (currentBalance < amount) {
+      console.log(currentBalance, "currentBalance")
+      console.log(amount, "amount")
+      if ((currentBalance + amount) < 0) {
         console.error('Insufficient balance');
         return false;
       }
@@ -86,4 +145,4 @@ const changeBalance = async(amount: number) => {
 
 
 
-export { getPokemonData, useFetchPokemon, addPokemon, changeBalance };
+export { getPokemonData, useFetchPokemon, addPokemon, changeBalance, resetShopAndAddVisitedTime, getShopVisitedTime, getShop };

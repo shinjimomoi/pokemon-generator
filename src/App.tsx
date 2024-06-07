@@ -10,7 +10,7 @@ import Loading from './components/Loading';
 const App: React.FC = () => {
   const [user, setUser] = useState<firebase.User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeSection, setActiveSection] = useState<string>('game');
+  const [activeSection, setActiveSection] = useState<string>('mypage');
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((authUser) => {

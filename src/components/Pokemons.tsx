@@ -66,7 +66,7 @@ const Pokemons: React.FC = () => {
 
   return (
     <>
-      <h2>My Cards</h2>
+      <h1>My Cards</h1>
       {loading ? (
         <Loading message="Loading cards..." />
       ) : error ? (

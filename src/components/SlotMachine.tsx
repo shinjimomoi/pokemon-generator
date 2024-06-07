@@ -1,30 +1,30 @@
 import React, { useEffect, useRef, useState } from "react";
-import { addPokemon, changeBalance } from '../pokemonService';
+import { addPokemon, changeBalance, useFetchPokemon } from '../pokemonService';
 
 
-interface SlotMachineProps {
-  handleGetPokemon: () => void;
-}
+// interface SlotMachineProps {
+//   handleGetPokemon: () => void;
+// }
 
-const SlotMachine: React.FC<SlotMachineProps> = ({ handleGetPokemon }) => {
+const SlotMachine: React.FC = () => {
   const [message, setMessage] = useState<string>("");
   const doorsRef = useRef<HTMLDivElement[]>([]);
   const items = [
     "💎",
-    // "🔔",
     // "🍒",
-    // "🔔",
     // "🍒",
-    // "🔔",
-    // "🔔",
     // "💎",
     // "🍒",
-    // "🔔",
   ];
 
   useEffect(() => {
     init();
   }, []); // Run only once on component mount
+
+  const handleGetPokemon = async () => {
+    const data = await useFetchPokemon();
+    addPokemon(data);
+};
 
   const init = (reset = true, groups = 1, duration = 1) => {
     const doors = document.querySelectorAll<HTMLDivElement>(".door");
@@ -101,6 +101,7 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleGetPokemon }) => {
             case "💎💎💎":
               setTimer(1200, () => setMessage("You won a card!"));
               setTimer(2400, handleGetPokemon);
+              
               break;
             case "🍒🍒🍒":
               setTimer(1200, () => {setMessage("You won $500!"); changeBalance(500);});
@@ -120,6 +121,15 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleGetPokemon }) => {
   };
 
   async function spin() {
+    const balanceChanged = await changeBalance(-3000);
+    if (!balanceChanged) {
+      console.error('Insufficient balance');
+      setMessage('Insufficient money to play.');
+      setTimeout(() => {
+        setMessage('');        
+      }, 1200);
+      return;
+    }
     changeBalance(-100)
     init(false, 1, 1);
 
@@ -151,6 +161,7 @@ const SlotMachine: React.FC<SlotMachineProps> = ({ handleGetPokemon }) => {
 
   return (
     <div id="slot-machine">
+      <h1>Pachinko</h1>
       <p>You have to pay $100 to play.</p>
       <div className="doors">
         <div className="door" ref={(el) => el && (doorsRef.current[0] = el)}>

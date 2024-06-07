@@ -42,7 +42,6 @@ const Navbar: React.FC<NavbarProps> = ({ setActiveSection, activeSection }) => {
         <h3 className="pokemon-count">${balance || 0}</h3>
       </div>
       <div className='btns'>
-
         {sections.map(section => (
           <Button
             key={section.name}
@@ -51,7 +50,6 @@ const Navbar: React.FC<NavbarProps> = ({ setActiveSection, activeSection }) => {
             className={`signout ${activeSection === section.name ? 'active' : ''}`}
           />
         ))}
-        
         <Button onClick={handleTheme} text={theme === 'light' ? <FontAwesomeIcon icon={faMoon}/> : <FontAwesomeIcon icon={faSun} />} className="signout" />
         <Button onClick={signout} text={<FontAwesomeIcon icon={faRightFromBracket}/>} className="signout" />
       </div>

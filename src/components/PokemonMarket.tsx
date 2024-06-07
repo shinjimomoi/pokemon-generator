@@ -49,6 +49,7 @@ const PokemonMarket: React.FC = () => {
     } catch (err) {
       setError("Failed to fetch Pokémon data. Please try again.");
     } finally {
+      console.log(pokemons, "pokemons array after removing")
       setTimeout(() => {
         setLoading(false);
       }, 1200);
@@ -59,7 +60,7 @@ const PokemonMarket: React.FC = () => {
     try {
       const currentVisitedTimestamp = await getShopVisitedTime();
       const currentTime = Date.now();
-      const tenMinutes = 10 * 60000;
+      const tenMinutes = 10 * 5;
       if (!currentVisitedTimestamp || currentTime - currentVisitedTimestamp >= tenMinutes) {
         await fetchFivePokemons();
       } else {
@@ -105,7 +106,7 @@ const PokemonMarket: React.FC = () => {
     const activeIndex = swiper.realIndex;
     setSelectedPokemon(pokemons[activeIndex]);
   };
-  
+
   return (
     <>
       <h1>Shop</h1>
@@ -115,7 +116,7 @@ const PokemonMarket: React.FC = () => {
         <div className="error">{error}</div>
       ) : (
         <div>
-          <p className="pokemon-count">Choose your card.</p>
+          {pokemons && pokemons.length > 0 && <p className="pokemon-count">Choose your card.</p>}
           <Swiper
             ref={swiperRef}
             spaceBetween={50}
@@ -124,6 +125,9 @@ const PokemonMarket: React.FC = () => {
             onSwiper={(swiper) => setSelectedPokemon(pokemons[swiper.realIndex])} // Set initial selected Pokemon
             loop={true}
           >
+            {pokemons && pokemons.length <= 0 &&
+              <h3>All pokemons were sold, come back later</h3>
+            }
             {pokemons &&
               pokemons.map((pokemon, index) => (
                 <li key={index}>

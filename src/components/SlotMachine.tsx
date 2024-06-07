@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { addPokemon, changeBalance, useFetchPokemon } from '../pokemonService';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlay } from "@fortawesome/free-solid-svg-icons";
 
 
 // interface SlotMachineProps {
@@ -121,7 +123,7 @@ const SlotMachine: React.FC = () => {
   };
 
   async function spin() {
-    const balanceChanged = await changeBalance(-3000);
+    const balanceChanged = await changeBalance(-100);
     if (!balanceChanged) {
       console.error('Insufficient balance');
       setMessage('Insufficient money to play.');
@@ -130,7 +132,6 @@ const SlotMachine: React.FC = () => {
       }, 1200);
       return;
     }
-    changeBalance(-100)
     init(false, 1, 1);
 
     for (const door of doorsRef.current) {
@@ -177,7 +178,7 @@ const SlotMachine: React.FC = () => {
       {message && <h2 className="msg">{message}</h2>}
       <div className="buttons">
         <button id="spinner" onClick={spin}>
-          Play
+          <FontAwesomeIcon icon={faPlay}/>
         </button>
         <button id="reseter" onClick={() => init()}>
           Reset

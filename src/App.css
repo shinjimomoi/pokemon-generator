@@ -101,6 +101,7 @@ ul {
 
 button {
   border: none;
+  outline: none;
 }
 
 .navbar button {
@@ -279,6 +280,7 @@ li {
 
 .btn {
   background-color: var(--color-main);
+  color: #fff;
 }
 
 .btn.my-cards {

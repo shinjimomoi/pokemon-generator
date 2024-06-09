@@ -60,7 +60,7 @@ const PokemonMarket: React.FC = () => {
     try {
       const currentVisitedTimestamp = await getShopVisitedTime();
       const currentTime = Date.now();
-      const tenMinutes = 10 * 5;
+      const tenMinutes = 10 * 1000;
       if (!currentVisitedTimestamp || currentTime - currentVisitedTimestamp >= tenMinutes) {
         await fetchFivePokemons();
       } else {
@@ -116,20 +116,18 @@ const PokemonMarket: React.FC = () => {
         <div className="error">{error}</div>
       ) : (
         <div>
-          {pokemons && pokemons.length > 0 && <p className="pokemon-count">Choose your card.</p>}
-          <Swiper
-            ref={swiperRef}
-            spaceBetween={50}
-            slidesPerView={1}
-            onSlideChange={handleSlideChange}
-            onSwiper={(swiper) => setSelectedPokemon(pokemons[swiper.realIndex])} // Set initial selected Pokemon
-            loop={true}
-          >
-            {pokemons && pokemons.length <= 0 &&
-              <h3>All pokemons were sold, come back later</h3>
-            }
-            {pokemons &&
-              pokemons.map((pokemon, index) => (
+        {pokemons && pokemons.length > 0 ? (
+          <>
+            <p className="pokemon-count">Choose your card.</p>
+            <Swiper
+              ref={swiperRef}
+              spaceBetween={50}
+              slidesPerView={1}
+              onSlideChange={handleSlideChange}
+              onSwiper={(swiper) => setSelectedPokemon(pokemons[swiper.realIndex])} // Set initial selected Pokemon
+              loop={true}
+            >
+              {pokemons.map((pokemon, index) => (
                 <li key={index}>
                   <SwiperSlide key={index} className="col-md-4 mb-4 blur">
                     <PokemonCard
@@ -144,10 +142,14 @@ const PokemonMarket: React.FC = () => {
                   </SwiperSlide>
                 </li>
               ))}
-          </Swiper>
-          {buyingMsg && <h2 className="msg">{buyingMsg}</h2>}
-          <Button onClick={BuyPokemon} text={"Buy"} className={"buy"} />
-        </div>
+            </Swiper>
+          </>
+        ) : (
+          <h3>All pokemons were sold, come back later</h3>
+        )}
+        {buyingMsg && <h2 className="msg">{buyingMsg}</h2>}
+        <Button onClick={BuyPokemon} text={"Buy"} className={"buy"} />
+      </div>
       )}
     </>
   );
